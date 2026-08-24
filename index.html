@@ -4,490 +4,397 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Naini Vivekanand — Generative AI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --void:#080b10;
-    --panel:#0d131b;
-    --panel-line:#1b2733;
-    --cyan:#5be9d1;
-    --cyan-dim:#2a5f57;
-    --amber:#ff9c4a;
-    --text:#dbe6ec;
-    --text-dim:#7c8b96;
-    --font-display:'JetBrains Mono', 'Space Mono', monospace;
-    --font-body:'Inter', -apple-system, sans-serif;
+    --bg: #0F1220;
+    --bg-2: #171B30;
+    --panel: #1B2040;
+    --panel-line: #2C3358;
+    --ink: #E9E7DF;
+    --ink-dim: #9A9FBF;
+    --amber: #FFB454;
+    --violet: #9C8CFF;
+    --green: #6FE3A5;
+    --red: #FF6B6B;
+    --radius: 3px;
   }
-  *{margin:0;padding:0;box-sizing:border-box;}
+  *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
   body{
-    background:var(--void);
-    color:var(--text);
-    font-family:var(--font-body);
-    overflow-x:hidden;
-    position:relative;
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(156,140,255,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(255,180,84,0.08), transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.55;
   }
-  body::before{
-    content:"";
-    position:fixed;inset:0;
+  ::selection{ background:var(--amber); color:#0F1220; }
+  a{ color:inherit; }
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 28px; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  .display{ font-family:'Space Grotesk', sans-serif; }
+
+  /* subtle scanline / grid texture */
+  .grid-overlay{
+    position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0.35;
     background-image:
-      linear-gradient(rgba(91,233,209,0.035) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(91,233,209,0.035) 1px, transparent 1px);
-    background-size:44px 44px;
-    pointer-events:none;
-    z-index:0;
-    mask-image:radial-gradient(ellipse 80% 60% at 50% 20%, black 40%, transparent 90%);
-  }
-  a{color:inherit;text-decoration:none;}
-
-  /* ---------- top scan bar ---------- */
-  .scanbar{
-    position:fixed;top:0;left:0;right:0;height:2px;z-index:50;
-    background:linear-gradient(90deg, transparent, var(--cyan), transparent);
-    animation:scan 6s linear infinite;
-    opacity:.6;
-  }
-  @keyframes scan{
-    0%{transform:translateX(-100%);}
-    100%{transform:translateX(100%);}
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 48px 48px;
   }
 
-  /* ---------- nav ---------- */
-  nav{
-    position:fixed;top:0;left:0;right:0;z-index:40;
-    display:flex;justify-content:space-between;align-items:center;
-    padding:22px 6vw;
-    backdrop-filter:blur(10px);
-    background:rgba(8,11,16,0.7);
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    backdrop-filter: blur(10px);
+    background:rgba(15,18,32,0.82);
     border-bottom:1px solid var(--panel-line);
   }
-  .logo{
-    font-family:var(--font-display);
-    font-size:14px;letter-spacing:.15em;
-    color:var(--cyan);
-  }
-  .logo span{color:var(--text-dim);}
-  .navlinks{display:flex;gap:34px;font-family:var(--font-display);font-size:12px;letter-spacing:.1em;}
-  .navlinks a{color:var(--text-dim);transition:color .25s;position:relative;}
-  .navlinks a:hover, .navlinks a:focus-visible{color:var(--cyan);}
-  .navlinks a::after{
-    content:"";position:absolute;bottom:-6px;left:0;width:0;height:1px;background:var(--cyan);
-    transition:width .25s;
-  }
-  .navlinks a:hover::after{width:100%;}
-  @media (max-width:720px){ .navlinks{display:none;} }
+  nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 0; }
+  .brand{ font-family:'IBM Plex Mono', monospace; font-size:14px; letter-spacing:0.02em; display:flex; align-items:center; gap:9px; }
+  .brand-dot{ width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 8px var(--green); animation:pulse 2.2s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+  .navlinks{ display:flex; gap:26px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-dim); }
+  .navlinks a{ text-decoration:none; transition:color .2s; position:relative; }
+  .navlinks a:hover{ color:var(--amber); }
+  .navlinks a::before{ content:'/'; margin-right:6px; color:var(--panel-line); }
 
-  section{position:relative;z-index:1;padding:120px 6vw 90px;}
+  /* ---------- HERO ---------- */
+  .hero{ position:relative; z-index:1; padding:74px 0 60px; }
+  .boot{
+    font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--ink-dim);
+    border:1px solid var(--panel-line); background:var(--panel);
+    border-radius:var(--radius); padding:14px 18px; max-width:560px; margin-bottom:34px;
+  }
+  .boot .line{ white-space:pre; }
+  .boot .ok{ color:var(--green); }
+  .boot .cursor{ display:inline-block; width:7px; height:14px; background:var(--amber); margin-left:3px; vertical-align:-2px; animation:blink 1s step-end infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
 
-  /* ---------- hero ---------- */
-  .hero{
-    min-height:100vh;
-    display:flex;flex-direction:column;justify-content:center;
-    padding-top:140px;
-  }
-  .hero-eyebrow{
-    font-family:var(--font-display);
-    color:var(--amber);
-    font-size:12px;letter-spacing:.2em;
-    display:flex;align-items:center;gap:10px;
-    margin-bottom:26px;
-  }
-  .dot{
-    width:7px;height:7px;border-radius:50%;
-    background:var(--amber);
-    box-shadow:0 0 8px var(--amber);
-    animation:pulse 1.8s ease-in-out infinite;
-  }
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.35;}}
-  .hero h1{
-    font-family:var(--font-display);
-    font-weight:700;
-    font-size:clamp(2.6rem, 7vw, 5.4rem);
-    line-height:1.02;
-    letter-spacing:-.01em;
-    color:#f2f8f7;
-    max-width:16ch;
-  }
-  .hero h1 .accent{color:var(--cyan);}
-  .hero-sub{
-    margin-top:28px;
-    max-width:640px;
-    font-size:1.15rem;
-    line-height:1.7;
-    color:var(--text-dim);
-  }
-  .hero-sub strong{color:var(--text);font-weight:600;}
-  .hero-cta{
-    margin-top:44px;
-    display:flex;gap:16px;flex-wrap:wrap;
-  }
-  .btn{
-    font-family:var(--font-display);
-    font-size:12px;letter-spacing:.1em;
-    padding:15px 28px;
-    border:1px solid var(--cyan-dim);
-    color:var(--cyan);
-    transition:all .25s;
-    display:inline-flex;align-items:center;gap:10px;
-  }
-  .btn:hover, .btn:focus-visible{
-    background:rgba(91,233,209,0.08);
-    border-color:var(--cyan);
-    box-shadow:0 0 24px rgba(91,233,209,0.15);
-  }
-  .btn.solid{
-    background:var(--cyan);
-    color:var(--void);
-    border-color:var(--cyan);
-    font-weight:700;
-  }
-  .btn.solid:hover{ box-shadow:0 0 28px rgba(91,233,209,0.35); }
+  .hero-grid{ display:grid; grid-template-columns: 1.25fr 0.9fr; gap:48px; align-items:start; }
+  @media (max-width: 880px){ .hero-grid{ grid-template-columns:1fr; } }
 
-  .hero-readout{
-    margin-top:80px;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:1px;
-    background:var(--panel-line);
-    border:1px solid var(--panel-line);
-    max-width:820px;
-  }
-  .readout-cell{
-    background:var(--void);
-    padding:18px 22px;
-  }
-  .readout-cell .label{
-    font-family:var(--font-display);
-    font-size:10px;letter-spacing:.15em;
-    color:var(--text-dim);
-    margin-bottom:8px;
-  }
-  .readout-cell .value{
-    font-family:var(--font-display);
-    font-size:15px;
-    color:var(--cyan);
-  }
+  .eyebrow{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; letter-spacing:0.16em; text-transform:uppercase; color:var(--violet); margin-bottom:14px; }
+  h1.name{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:clamp(38px, 5.6vw, 60px); line-height:1.02; margin:0 0 16px; letter-spacing:-0.01em; }
+  h1.name .accent{ color:var(--amber); }
+  .role{ font-size:19px; color:var(--ink-dim); max-width:520px; margin-bottom:26px; }
+  .role b{ color:var(--ink); font-weight:600; }
 
-  /* ---------- section headers ---------- */
-  .sec-head{
-    display:flex;align-items:baseline;gap:18px;
-    margin-bottom:56px;
+  .contact-row{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:8px; }
+  .chip{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-dim);
+    border:1px solid var(--panel-line); padding:7px 12px; border-radius:var(--radius);
+    text-decoration:none; transition:border-color .2s, color .2s;
   }
-  .sec-tag{
-    font-family:var(--font-display);
-    font-size:12px;color:var(--amber);letter-spacing:.15em;
-  }
-  .sec-title{
-    font-family:var(--font-display);
-    font-size:clamp(1.6rem,3.4vw,2.4rem);
-    color:#f2f8f7;
-  }
-  .sec-line{
-    flex:1;height:1px;background:var(--panel-line);
-  }
+  .chip:hover{ border-color:var(--amber); color:var(--amber); }
 
-  /* ---------- about ---------- */
-  .about-grid{
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    gap:64px;
+  /* ---------- ROUTING PANEL (signature element) ---------- */
+  .routing-panel{
+    border:1px solid var(--panel-line); background:linear-gradient(180deg, var(--panel), var(--bg-2));
+    border-radius:var(--radius); overflow:hidden;
   }
-  @media (max-width:860px){ .about-grid{grid-template-columns:1fr;} }
-  .about-text p{
-    color:var(--text-dim);
-    line-height:1.85;
-    font-size:1.02rem;
-    margin-bottom:20px;
+  .routing-head{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:11px 16px; border-bottom:1px solid var(--panel-line);
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.08em;
   }
-  .about-text strong{color:var(--text);}
-  .stack-panel{
-    border:1px solid var(--panel-line);
-    background:var(--panel);
-    padding:32px;
-  }
-  .stack-panel h3{
-    font-family:var(--font-display);
-    font-size:12px;letter-spacing:.15em;
-    color:var(--text-dim);
-    margin-bottom:20px;
-  }
-  .stack-row{
-    display:flex;justify-content:space-between;
-    padding:12px 0;
-    border-bottom:1px solid var(--panel-line);
-    font-size:14px;
-  }
-  .stack-row:last-child{border-bottom:none;}
-  .stack-row .k{color:var(--text);}
-  .stack-row .v{color:var(--cyan);font-family:var(--font-display);font-size:12px;}
+  .routing-head .live{ color:var(--green); display:flex; align-items:center; gap:6px; }
+  .routing-head .live::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--green); box-shadow:0 0 6px var(--green); }
+  .provider{ padding:13px 16px; border-bottom:1px solid var(--panel-line); }
+  .provider:last-child{ border-bottom:none; }
+  .provider-top{ display:flex; justify-content:space-between; font-family:'IBM Plex Mono', monospace; font-size:12.5px; margin-bottom:8px; }
+  .provider-name{ color:var(--ink); }
+  .provider-status{ color:var(--green); }
+  .provider-status.warn{ color:var(--amber); }
+  .health-track{ height:5px; background:#0C0F1D; border-radius:3px; overflow:hidden; }
+  .health-fill{ height:100%; background:linear-gradient(90deg, var(--violet), var(--green)); border-radius:3px; transform-origin:left; animation:fillbar 1.4s ease-out forwards; }
+  @keyframes fillbar{ from{ transform:scaleX(0); } }
+  .routing-foot{ padding:10px 16px; font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-dim); border-top:1px solid var(--panel-line); }
 
-  /* ---------- projects ---------- */
-  .flagship{
-    border:1px solid var(--cyan-dim);
-    background:linear-gradient(160deg, rgba(91,233,209,0.06), transparent 60%), var(--panel);
-    padding:44px;
-    margin-bottom:26px;
-    position:relative;
-    overflow:hidden;
-  }
-  .flagship::before{
-    content:"FLAGSHIP";
-    position:absolute;top:20px;right:-38px;
-    background:var(--cyan);color:var(--void);
-    font-family:var(--font-display);
-    font-size:10px;letter-spacing:.2em;
-    padding:5px 42px;
-    transform:rotate(45deg);
-    font-weight:700;
-  }
-  .flagship h3{
-    font-family:var(--font-display);
-    font-size:1.5rem;color:#f2f8f7;margin-bottom:14px;
-  }
-  .flagship p{
-    color:var(--text-dim);line-height:1.75;max-width:70ch;margin-bottom:22px;
-  }
-  .tag-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px;}
-  .tag{
-    font-family:var(--font-display);
-    font-size:11px;letter-spacing:.05em;
-    padding:6px 12px;border:1px solid var(--panel-line);color:var(--text-dim);
-  }
+  /* ---------- SECTION SHELL ---------- */
+  section{ position:relative; z-index:1; padding:64px 0; border-top:1px solid var(--panel-line); }
+  .sec-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:36px; }
+  .sec-tag{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--amber); border:1px solid rgba(255,180,84,0.35); padding:4px 9px; border-radius:var(--radius); text-transform:uppercase; letter-spacing:0.06em; }
+  .sec-title{ font-family:'Space Grotesk', sans-serif; font-size:26px; font-weight:600; margin:0; }
+  .sec-sub{ color:var(--ink-dim); font-size:14.5px; margin:-24px 0 32px; max-width:640px; }
 
-  .proj-grid{
-    display:grid;grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
-    gap:1px;background:var(--panel-line);border:1px solid var(--panel-line);
+  /* ---------- PROJECTS AS LOG ENTRIES ---------- */
+  .log{ border-left:1px solid var(--panel-line); margin-left:6px; }
+  .entry{ position:relative; padding:0 0 42px 32px; }
+  .entry:last-child{ padding-bottom:4px; }
+  .entry::before{
+    content:''; position:absolute; left:-6.5px; top:4px; width:12px; height:12px; border-radius:50%;
+    background:var(--bg); border:2px solid var(--violet);
   }
-  .proj-card{
-    background:var(--panel);padding:30px;
-    transition:background .25s;
-    display:flex;flex-direction:column;
-  }
-  .proj-card:hover{background:#101a24;}
-  .proj-card .num{
-    font-family:var(--font-display);font-size:11px;color:var(--amber);margin-bottom:14px;
-  }
-  .proj-card h4{
-    font-family:var(--font-display);font-size:16px;color:#f2f8f7;margin-bottom:12px;
-  }
-  .proj-card p{
-    color:var(--text-dim);font-size:14px;line-height:1.65;flex:1;margin-bottom:18px;
-  }
-  .proj-card .link{
-    font-family:var(--font-display);font-size:11px;color:var(--cyan);letter-spacing:.1em;
-    display:inline-flex;align-items:center;gap:6px;
-  }
-  .proj-card .link:hover{text-decoration:underline;}
+  .entry.active::before{ border-color:var(--green); box-shadow:0 0 10px rgba(111,227,165,0.5); }
+  .entry-meta{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:10px; font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:0.05em; }
+  .tag{ padding:3px 8px; border-radius:var(--radius); border:1px solid var(--panel-line); }
+  .tag.status-live{ color:var(--green); border-color:rgba(111,227,165,0.35); }
+  .tag.status-shipped{ color:var(--violet); border-color:rgba(156,140,255,0.35); }
+  .entry h3{ font-family:'Space Grotesk', sans-serif; font-size:21px; margin:0 0 4px; font-weight:600; }
+  .entry .sub{ color:var(--ink-dim); font-size:13.5px; margin-bottom:14px; font-family:'IBM Plex Mono', monospace; }
+  .entry ul{ margin:0; padding-left:18px; }
+  .entry li{ margin-bottom:8px; font-size:15px; color:#D6D4CC; }
+  .entry li::marker{ color:var(--amber); }
+  .stack-row{ display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; }
+  .stack-chip{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-dim); background:var(--panel); border:1px solid var(--panel-line); padding:4px 9px; border-radius:var(--radius); }
 
-  /* ---------- skills ---------- */
-  .skills-grid{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:1px;background:var(--panel-line);border:1px solid var(--panel-line);
-  }
-  .skill-block{background:var(--void);padding:28px;}
-  .skill-block h4{
-    font-family:var(--font-display);font-size:12px;letter-spacing:.12em;color:var(--amber);margin-bottom:16px;
-  }
-  .skill-block ul{list-style:none;}
-  .skill-block li{
-    color:var(--text-dim);font-size:14px;line-height:2.1;
-    position:relative;padding-left:16px;
-  }
-  .skill-block li::before{
-    content:"›";position:absolute;left:0;color:var(--cyan);
-  }
+  /* ---------- SKILLS AS MANIFEST TABLE ---------- */
+  .manifest{ display:grid; grid-template-columns: repeat(2, 1fr); gap:1px; background:var(--panel-line); border:1px solid var(--panel-line); border-radius:var(--radius); overflow:hidden; }
+  @media (max-width:700px){ .manifest{ grid-template-columns:1fr; } }
+  .manifest-cell{ background:var(--panel); padding:22px 24px; }
+  .manifest-cell h4{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; text-transform:uppercase; letter-spacing:0.1em; color:var(--amber); margin:0 0 14px; }
+  .manifest-cell .items{ display:flex; flex-wrap:wrap; gap:8px; }
+  .manifest-cell .items span{ font-size:13.5px; color:#D6D4CC; padding:5px 0; }
+  .manifest-cell .items span:not(:last-child)::after{ content:'·'; color:var(--panel-line); margin-left:8px; }
 
-  /* ---------- contact ---------- */
-  .contact{
-    text-align:center;
-    padding:130px 6vw 100px;
-  }
-  .contact .sec-tag{display:block;margin-bottom:18px;}
-  .contact h2{
-    font-family:var(--font-display);
-    font-size:clamp(2rem,5vw,3.4rem);
-    color:#f2f8f7;max-width:20ch;margin:0 auto 24px;
-  }
-  .contact p{color:var(--text-dim);max-width:52ch;margin:0 auto 44px;line-height:1.7;}
-  .contact-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;}
+  /* ---------- EXPERIENCE + EDUCATION ---------- */
+  .two-col{ display:grid; grid-template-columns: 1fr 1fr; gap:48px; }
+  @media (max-width:780px){ .two-col{ grid-template-columns:1fr; } }
+  .rec{ margin-bottom:26px; }
+  .rec:last-child{ margin-bottom:0; }
+  .rec-title{ font-family:'Space Grotesk', sans-serif; font-size:17px; font-weight:600; margin:0 0 2px; }
+  .rec-org{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--violet); margin-bottom:10px; }
+  .rec p{ margin:0 0 6px; font-size:14.5px; color:#D6D4CC; }
 
-  footer{
-    border-top:1px solid var(--panel-line);
-    padding:26px 6vw;
-    display:flex;justify-content:space-between;
-    font-family:var(--font-display);font-size:11px;color:var(--text-dim);
-    letter-spacing:.08em;
-  }
-  @media (max-width:600px){ footer{flex-direction:column;gap:8px;} }
+  .cert-list{ list-style:none; margin:0; padding:0; }
+  .cert-list li{ display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--panel-line); font-size:14px; }
+  .cert-list li:first-child{ padding-top:0; }
+  .cert-list li span:last-child{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--ink-dim); white-space:nowrap; }
 
-  @media (prefers-reduced-motion:reduce){
-    *{animation:none !important; transition:none !important;}
+  /* ---------- FOOTER / CONTACT ---------- */
+  footer{ position:relative; z-index:1; padding:60px 0 46px; text-align:center; }
+  footer .display{ font-size:clamp(26px, 4vw, 38px); font-weight:600; margin:0 0 18px; }
+  footer .role{ margin:0 auto 26px; }
+  .cta-row{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; }
+  .btn{ font-family:'IBM Plex Mono', monospace; font-size:13px; padding:11px 20px; border-radius:var(--radius); text-decoration:none; transition:all .2s; }
+  .btn-primary{ background:var(--amber); color:#0F1220; font-weight:600; }
+  .btn-primary:hover{ background:#ffc57a; }
+  .btn-ghost{ border:1px solid var(--panel-line); color:var(--ink-dim); }
+  .btn-ghost:hover{ border-color:var(--violet); color:var(--violet); }
+  .fine{ margin-top:34px; font-family:'IBM Plex Mono', monospace; font-size:11px; color:#565C82; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
   }
+  a:focus-visible, .chip:focus-visible{ outline:2px solid var(--amber); outline-offset:2px; }
 </style>
 </head>
 <body>
+<div class="grid-overlay"></div>
 
-<div class="scanbar"></div>
-
-<nav>
-  <div class="logo">N.V<span>://VICKY</span></div>
-  <div class="navlinks">
-    <a href="#about">ABOUT</a>
-    <a href="#projects">PROJECTS</a>
-    <a href="#skills">SKILLS</a>
-    <a href="#contact">CONTACT</a>
+<header>
+  <div class="wrap">
+    <nav>
+      <div class="brand"><span class="brand-dot"></span>NAINI.VIVEKANAND <span style="color:var(--panel-line)">//</span> <span style="color:var(--ink-dim)">agentic-systems</span></div>
+    </nav>
   </div>
-</nav>
+</header>
 
-<section class="hero">
-  <div class="hero-eyebrow"><span class="dot"></span>SYSTEM ONLINE — HYDERABAD, IN</div>
-  <h1>Naini Vivekanand.<br>I build agents that<br><span class="accent">think for themselves.</span></h1>
-  <p class="hero-sub">
-    Generative AI Engineer specializing in <strong>autonomous, self-evolving agent systems</strong>.
-    Currently building <strong>AIRA</strong> — a multi-provider agentic architecture with its own
-    reasoning loop, guardrails, and the ability to rewrite parts of itself without breaking.
-  </p>
-  <div class="hero-cta">
-    <a class="btn solid" href="#projects">VIEW PROJECTS →</a>
-    <a class="btn" href="https://github.com/kvik0802" target="_blank" rel="noopener">GITHUB</a>
-    <a class="btn" href="https://www.linkedin.com/in/naini-vivekanand-769912215/" target="_blank" rel="noopener">LINKEDIN</a>
-  </div>
-
-  <div class="hero-readout">
-    <div class="readout-cell"><div class="label">ROLE</div><div class="value">GenAI Engineer</div></div>
-    <div class="readout-cell"><div class="label">FOCUS</div><div class="value">Agentic Systems</div></div>
-    <div class="readout-cell"><div class="label">EDUCATION</div><div class="value">B.Tech CSE (AI/ML)</div></div>
-    <div class="readout-cell"><div class="label">STATUS</div><div class="value">Open to work</div></div>
-  </div>
-</section>
-
-<section id="about">
-  <div class="sec-head">
-    <span class="sec-tag">01 / ABOUT</span>
-    <div class="sec-line"></div>
-  </div>
-  <div class="about-grid">
-    <div class="about-text">
-      <p>I go by <strong>Vicky</strong>. I'm an entry-level Generative AI Engineer out of Hyderabad, trained through a B.Tech in Computer Science (AI & ML) at Neil Gogte Institute of Technology, with hands-on GenAI specialization through Innomatics Research Labs.</p>
-      <p>Most of my time goes into <strong>AIRA</strong>, a self-evolving autonomous agent system I've been building end-to-end — from a multi-provider LLM routing mesh and autonomous cron scheduler, to a full guardrails layer and a self-evolution loop with circuit breakers and atomic checkpointing.</p>
-      <p>I'm drawn to systems that feel alive: agents that reason, recover, and improve on their own. That instinct shows up in every project below, and in the visual language I build them with — dark interfaces, live telemetry, holographic control-room energy.</p>
+<div class="hero">
+  <div class="wrap">
+    <div class="boot mono">
+      <div class="line">$ init --profile=naini_vivekanand</div>
+      <div class="line"><span class="ok">✓</span> role: generative ai engineer, agentic systems</div>
+      <div class="line"><span class="ok">✓</span> location: hyderabad, telangana, in</div>
+      <div class="line">$ status: open to opportunities<span class="cursor"></span></div>
     </div>
-    <div class="stack-panel">
-      <h3>CORE STACK</h3>
-      <div class="stack-row"><span class="k">Languages</span><span class="v">PYTHON / TS</span></div>
-      <div class="stack-row"><span class="k">LLM Orchestration</span><span class="v">MULTI-PROVIDER</span></div>
-      <div class="stack-row"><span class="k">Fine-tuning</span><span class="v">UNSLOTH / GGUF</span></div>
-      <div class="stack-row"><span class="k">Agent Infra</span><span class="v">GUARDRAILS / CRON</span></div>
-      <div class="stack-row"><span class="k">Frontend</span><span class="v">REACT / ELECTRON</span></div>
-      <div class="stack-row"><span class="k">3D / WebGL</span><span class="v">THREE.JS</span></div>
-      <div class="stack-row"><span class="k">Data</span><span class="v">SELENIUM / EDA</span></div>
+
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Generative AI Engineer</div>
+        <h1 class="name">I build systems that <span class="accent">decide</span>,<br>not just respond.</h1>
+        <p class="role">Designing and shipping <b>agentic AI systems</b> — from self-evolving multi-agent architectures to production safety middleware. Fluent in <b>LLM orchestration</b>, <b>RAG pipelines</b>, and tool-use frameworks, with a habit of taking things from architecture to a working, tested CLI.</p>
+        <div class="contact-row">
+          <a class="chip" href="mailto:nainiv750@gmail.com">nainiv750@gmail.com</a>
+          <a class="chip" href="tel:+917288945374">+91 72889 45374</a>
+          <span class="chip" style="cursor:default;">Hyderabad, India</span>
+          <a class="chip" href="https://github.com/kvik0802" target="_blank" rel="noopener">github.com/kvik0802</a>
+          <a class="chip" href="https://www.linkedin.com/in/naini-vivekanand-769912215/" target="_blank" rel="noopener">linkedin.com/in/naini-vivekanand-769912215/</a>
+        </div>
+      </div>
+
+      <div class="routing-panel">
+        <div class="routing-head">
+          <span>LLM Router — Live Failure</span>
+          <span class="live">healthy</span>
+        </div>
+        <div class="provider">
+          <div class="provider-top"><span class="provider-name mono">provider_a · primary</span><span class="provider-status mono">98% health</span></div>
+          <div class="health-track"><div class="health-fill" style="width:98%;"></div></div>
+        </div>
+        <div class="provider">
+          <div class="provider-top"><span class="provider-name mono">provider_b · secondary</span><span class="provider-status mono">91% health</span></div>
+          <div class="health-track"><div class="health-fill" style="width:91%;"></div></div>
+        </div>
+        <div class="provider">
+          <div class="provider-top"><span class="provider-name mono">provider_c · fallback</span><span class="provider-status warn mono">63% health</span></div>
+          <div class="health-track"><div class="health-fill" style="width:63%; animation-delay:.1s;"></div></div>
+        </div>
+        <div class="routing-foot">guardrails: pre-execution risk classifier active on all directives</div>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
-<section id="projects">
-  <div class="sec-head">
-    <span class="sec-tag">02 / PROJECTS</span>
-    <div class="sec-line"></div>
-  </div>
+<section id="work">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-tag">system.log</span>
+      <h2 class="sec-title">Projects</h2>
+    </div>
+    <p class="sec-sub">Personal projects, in the order they were architected — each one a step from "an agent that calls tools" toward "a system that governs itself."</p>
 
-  <div class="flagship">
-    <h3>AIRA — Autonomous Intelligence & Reasoning Agent</h3>
-    <p>A self-evolving agent architecture built from the ground up: a multi-provider LLM routing mesh, an autonomous cron scheduler, a delivery ledger, and a self-evolution loop protected by circuit breakers and atomic checkpointing. The CLI alone ships 65+ commands, multi-provider LLM support, and persistent memory.</p>
-    <div class="tag-row">
-      <span class="tag">Agentic AI</span>
-      <span class="tag">Self-Evolution</span>
-      <span class="tag">Guardrails</span>
-      <span class="tag">Python</span>
-    </div>
-    <a class="btn" href="https://github.com/kvik0802/A.I.R.A-CLI" target="_blank" rel="noopener">EXPLORE REPO →</a>
-  </div>
+    <div class="log">
+      <div class="entry active">
+        <div class="entry-meta"><span class="tag status-live">running</span><span>BrainOS</span></div>
+        <h3>AIRA — Autonomous AI Agent System</h3>
+        <div class="sub">Self-evolving agentic architecture · ~391 files, 800+ passing tests</div>
+        <ul>
+          <li>Architected a self-evolving agentic system with autonomous scheduling, multi-provider LLM routing with health-scored failover, and a pre-execution risk/guardrails classifier covering every directive type.</li>
+          <li>Built a self-learning loop grounded in Complementary Learning Systems theory: a durable replay pool, domain-scoped calibration scoring, and an auto-triggered LoRA fine-tuning and promotion pipeline (Unsloth + GGUF + Ollama).</li>
+          <li>Unified the codebase into a single CLI with a consolidated PEP 621 dependency layer, growing the test suite to 800+ tests to keep the autonomous system reliable in production.</li>
+        </ul>
+        <div class="stack-row">
+          <span class="stack-chip">Python</span><span class="stack-chip">LoRA / Unsloth</span><span class="stack-chip">GGUF · Ollama</span><span class="stack-chip">Multi-provider routing</span>
+        </div>
+      </div>
 
-  <div class="proj-grid">
-    <div class="proj-card">
-      <div class="num">// 02</div>
-      <h4>agent-guardian</h4>
-      <p>Real-time AI safety middleware for autonomous agents — intercepts, scores, simulates, approves, and rolls back risky agent actions before they execute.</p>
-      <a class="link" href="https://github.com/kvik0802/agent-guardian" target="_blank" rel="noopener">VIEW REPO →</a>
-    </div>
-    <div class="proj-card">
-      <div class="num">// 03</div>
-      <h4>omniscient-terminal</h4>
-      <p>A dark mission-control dashboard for financial markets — live charts, AI predictions, trade signals, a world map, paper trading, and a news feed in one HUD.</p>
-      <a class="link" href="https://github.com/kvik0802/omniscient-terminal" target="_blank" rel="noopener">VIEW REPO →</a>
-    </div>
-    <div class="proj-card">
-      <div class="num">// 04</div>
-      <h4>particle-manipulator</h4>
-      <p>An interactive 3D particle engine — 150K WebGL particles morphing seamlessly between shapes, text, and cosmic formations. Built with Three.js and Flask.</p>
-      <a class="link" href="https://github.com/kvik0802/particle-manipulator" target="_blank" rel="noopener">VIEW REPO →</a>
-    </div>
-    <div class="proj-card">
-      <div class="num">// 05</div>
-      <h4>blood-bank-locator</h4>
-      <p>An intelligent blood bank discovery platform connecting patients to nearby blood banks in real time, with ML-driven ranking and interactive maps.</p>
-      <a class="link" href="https://github.com/kvik0802/blood-bank-locator" target="_blank" rel="noopener">VIEW REPO →</a>
-    </div>
-  </div>
-</section>
+      <div class="entry">
+        <div class="entry-meta"><span class="tag status-shipped">shipped</span><span>Safety middleware</span></div>
+        <h3>Agent Guardian</h3>
+        <div class="sub">AI safety & orchestration middleware</div>
+        <ul>
+          <li>Built governance middleware that sits between agents and their actions, using Python, FastAPI, GPT-4o-mini, and Next.js.</li>
+          <li>Implemented real-time risk scoring, human-in-the-loop approval workflows, and rollback mechanisms for agentic tool use.</li>
+          <li>Built observability dashboards to monitor agent behavior and enforce policy compliance across running agents.</li>
+        </ul>
+        <div class="stack-row">
+          <span class="stack-chip">FastAPI</span><span class="stack-chip">GPT-4o-mini</span><span class="stack-chip">Next.js</span><span class="stack-chip">Human-in-the-loop</span>
+        </div>
+      </div>
 
-<section id="skills">
-  <div class="sec-head">
-    <span class="sec-tag">03 / CAPABILITIES</span>
-    <div class="sec-line"></div>
-  </div>
-  <div class="skills-grid">
-    <div class="skill-block">
-      <h4>AGENTIC AI</h4>
-      <ul>
-        <li>Multi-agent orchestration</li>
-        <li>Self-evolving systems</li>
-        <li>Guardrails & safety layers</li>
-        <li>Autonomous scheduling</li>
-      </ul>
-    </div>
-    <div class="skill-block">
-      <h4>LLM ENGINEERING</h4>
-      <ul>
-        <li>Multi-provider routing</li>
-        <li>LoRA fine-tuning</li>
-        <li>Prompt & context design</li>
-        <li>Retrieval & memory systems</li>
-      </ul>
-    </div>
-    <div class="skill-block">
-      <h4>ENGINEERING</h4>
-      <ul>
-        <li>Python / TypeScript</li>
-        <li>CLI & IDE tooling</li>
-        <li>Electron desktop apps</li>
-        <li>Web scraping & EDA</li>
-      </ul>
-    </div>
-    <div class="skill-block">
-      <h4>DESIGN</h4>
-      <ul>
-        <li>Holographic / HUD UI</li>
-        <li>Three.js & WebGL</li>
-        <li>Data dashboards</li>
-        <li>Systems visualization</li>
-      </ul>
+      <div class="entry">
+        <div class="entry-meta"><span class="tag status-shipped">shipped</span><span>Developer tooling</span></div>
+        <h3>AIRA CLI</h3>
+        <div class="sub">AI-powered developer command-line assistant</div>
+        <ul>
+          <li>Developed a command-line AI assistant in Python for code generation, debugging, project analysis, and file management via natural language.</li>
+          <li>Designed a modular, model-agnostic architecture supporting multiple LLM providers, API integration, and project-aware context for automation workflows.</li>
+        </ul>
+        <div class="stack-row">
+          <span class="stack-chip">Python</span><span class="stack-chip">Model-agnostic</span><span class="stack-chip">Natural-language ops</span>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-meta"><span class="tag status-shipped">shipped</span><span>Foundations</span></div>
+        <h3>AIRA-LLM v1 (7B)</h3>
+        <div class="sub">Custom transformer-based conversational model</div>
+        <ul>
+          <li>Developed and optimized a 7B-parameter transformer-based LLM on the Ollama framework for conversational AI and contextual reasoning.</li>
+        </ul>
+        <div class="stack-row">
+          <span class="stack-chip">Transformers</span><span class="stack-chip">Ollama</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="contact" class="contact">
-  <span class="sec-tag">04 / CONTACT</span>
-  <h2>Let's build something that thinks on its own.</h2>
-  <p>Open to Generative AI and agentic AI roles in India and remote-friendly teams abroad. Reach out on either channel below.</p>
-  <div class="contact-links">
-    <a class="btn solid" href="https://www.linkedin.com/in/naini-vivekanand-769912215/" target="_blank" rel="noopener">CONNECT ON LINKEDIN →</a>
-    <a class="btn" href="https://github.com/kvik0802" target="_blank" rel="noopener">SEE THE CODE →</a>
+<section id="stack">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-tag">capabilities</span>
+      <h2 class="sec-title">Stack manifest</h2>
+    </div>
+    <p class="sec-sub">What's under the hood — grouped the way the systems above actually use it.</p>
+
+    <div class="manifest">
+      <div class="manifest-cell">
+        <h4>Agentic AI & LLMs</h4>
+        <div class="items">
+          <span>Agent architectures</span><span>Tool use / orchestration</span><span>RAG</span><span>Prompt engineering</span><span>Model evaluation</span><span>LangChain</span><span>LlamaIndex</span><span>Hugging Face Transformers</span><span>Vector databases</span><span>LoRA fine-tuning</span><span>STT / TTS</span><span>Multi-provider LLM routing</span>
+        </div>
+      </div>
+      <div class="manifest-cell">
+        <h4>Programming & Systems</h4>
+        <div class="items">
+          <span>Python</span><span>JavaScript</span><span>C++</span><span>C</span><span>SQL</span><span>REST APIs</span><span>Message queues</span><span>MLOps</span>
+        </div>
+      </div>
+      <div class="manifest-cell">
+        <h4>Frameworks</h4>
+        <div class="items">
+          <span>FastAPI</span><span>Flask</span><span>React</span><span>Next.js</span><span>Electron</span><span>Pandas</span><span>NumPy</span><span>Matplotlib</span><span>Seaborn</span><span>Scikit-learn</span>
+        </div>
+      </div>
+      <div class="manifest-cell">
+        <h4>Cloud, Data & DevOps</h4>
+        <div class="items">
+          <span>AWS</span><span>Microsoft Azure</span><span>Docker</span><span>Kubernetes</span><span>Git</span><span>MySQL</span><span>MongoDB</span><span>Data visualization</span>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<footer>
-  <span>© 2026 NAINI VIVEKANAND</span>
-  <span>BUILT WITH INTENT — HYDERABAD, IN</span>
+<section id="experience">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-tag">record</span>
+      <h2 class="sec-title">Experience & education</h2>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h4 class="mono" style="font-size:11.5px; text-transform:uppercase; letter-spacing:0.1em; color:var(--amber); margin-bottom:18px;">Experience</h4>
+        <div class="rec">
+          <div class="rec-title">Data Science Intern</div>
+          <div class="rec-org">Cognifyz Technologies</div>
+          <p>Performed data cleaning, exploratory data analysis, and built machine learning models in Python on real-world datasets.</p>
+          <p>Applied data visualization techniques to translate raw data into actionable insights for stakeholders.</p>
+        </div>
+
+        <h4 class="mono" style="font-size:11.5px; text-transform:uppercase; letter-spacing:0.1em; color:var(--amber); margin:34px 0 18px;">Certifications</h4>
+        <ul class="cert-list mono">
+          <li><span>Claude 101</span><span>Anthropic</span></li>
+          <li><span>AI Fluency Framework & Foundations</span><span>Anthropic</span></li>
+          <li><span>Exploratory Data Analysis</span><span>Innomatics Research Labs</span></li>
+          <li><span>Power BI Certification</span><span>Innomatics Research Labs</span></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="mono" style="font-size:11.5px; text-transform:uppercase; letter-spacing:0.1em; color:var(--amber); margin-bottom:18px;">Education</h4>
+        <div class="rec">
+          <div class="rec-title">Data Science & Generative AI</div>
+          <div class="rec-org">Innomatics Research Labs, Hyderabad</div>
+        </div>
+        <div class="rec">
+          <div class="rec-title">B.Tech, Computer Science Engineering (AI & ML)</div>
+          <div class="rec-org">Neil Gogte Institute of Technology, Hyderabad</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <p class="display">Building the next autonomous system?</p>
+    <p class="role" style="margin-left:auto;margin-right:auto;">Let's talk agents, orchestration, or anything that needs to think for itself.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="mailto:nainiv750@gmail.com">Email me</a>
+      <a class="btn btn-ghost" href="https://github.com/kvik0802" target="_blank" rel="noopener">View GitHub</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/naini-vivekanand-769912215/" target="_blank" rel="noopener">View LinkedIn</a>
+    </div>
+    <div class="fine">$ echo "thanks for reading" — Naini Vivekanand, Hyderabad, India</div>
+  </div>
 </footer>
 
 </body>
