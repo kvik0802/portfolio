@@ -548,7 +548,7 @@ if (window.Lenis) {
 const cur=document.getElementById('cur'), curLabel=document.getElementById('curLabel');
 let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my;
 window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
-window.addEventListener('resize',()=>{mx=Math.min(mx,innerWidth);my=Math.min(my,innerHeight);});
+window.addEventListener('resize',()=>{mx=innerWidth/2;my=innerHeight/2;});
 (function loop(){cx+=(mx-cx)*0.3;cy+=(my-cy)*0.3;cur.style.left=cx+'px';cur.style.top=cy+'px';curLabel.style.left=cx+'px';curLabel.style.top=cy+'px';requestAnimationFrame(loop);})();
 document.querySelectorAll('a,button,.pcard,.chip,.btn,.cap-item,.stack-card,.arch-card,.titem,.contact-link').forEach(el=>{
   el.addEventListener('mouseenter',()=>{curLabel.textContent=(el.dataset.cur||el.textContent.trim().slice(0,20)||'select');curLabel.classList.add('show');});
@@ -608,45 +608,88 @@ typeLoop();
   }
   draw();
 })();
-
-// ---------- 100 AGENTS SIGNATURE ----------
-(function(){
+// ---------- 100 AGENTS SIGNATURE (3D) ----------
+(async function(){
   const canvas=document.getElementById('agentsCanvas'); if(!canvas) return;
-  const ctx=canvas.getContext('2d');
-  let W,H,progress=0;
+  const THREE=await import('three');
+  const {Scene,PerspectiveCamera,WebGLRenderer,BufferGeometry,Float32BufferAttribute,Points,PointsMaterial,Color,AdditiveBlending,Mesh,IcosahedronGeometry,MeshBasicMaterial,SphereGeometry,LineSegments,LineBasicMaterial,GridHelper,FogExp2} = THREE;
+
+  const container=canvas.parentElement;
+  const renderer=new WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene=new Scene();
+  scene.fog=new FogExp2(0x050505, 0.06);
+  const camera=new PerspectiveCamera(60, 1, 0.1, 100);
+  camera.position.set(0, 1.5, 9);
+
+  let W=container.clientWidth, H=container.clientHeight;
+  function resize(){ W=container.clientWidth; H=container.clientHeight; renderer.setSize(W,H,false); camera.aspect=W/H; camera.updateProjectionMatrix(); }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // grid floor
+  const grid=new GridHelper(20, 40, 0x00ff88, 0x1a1a2e);
+  grid.position.y=-3; grid.material.opacity=0.25; grid.material.transparent=true;
+  scene.add(grid);
+
   const N=100;
-  const agents=[];
-  function init(){
-    W=canvas.width=canvas.clientWidth*devicePixelRatio;
-    H=canvas.height=canvas.clientHeight*devicePixelRatio;
-    ctx.scale(devicePixelRatio,devicePixelRatio);
-    W=canvas.clientWidth; H=canvas.clientHeight;
-    agents.length=0;
-    for(let i=0;i<N;i++){
-      const angle=Math.random()*Math.PI*2;
-      const rad=Math.min(W,H)*0.42*(0.6+Math.random()*0.4);
-      agents.push({
-        sx: W/2 + Math.cos(angle)*rad + (Math.random()-0.5)*60,
-        sy: H/2 + Math.sin(angle)*rad + (Math.random()-0.5)*60,
-        // cluster target near center with spread
-        tx: W/2 + (Math.random()-0.5)*120,
-        ty: H/2 + (Math.random()-0.5)*120,
-        hue: i%3,
-        phase: Math.random()*Math.PI*2,
-        r: 2.2+Math.random()*1.6
-      });
-    }
+  // scatter positions (sphere shell)
+  const scatter=[]; const cluster=[];
+  for(let i=0;i<N;i++){
+    const a=Math.random()*Math.PI*2; const b=Math.acos(2*Math.random()-1);
+    const r=5.5+Math.random()*1.5;
+    scatter.push(new THREE.Vector3(Math.sin(b)*Math.cos(a)*r, Math.sin(b)*Math.sin(a)*r*0.6, Math.cos(b)*r));
+    cluster.push(new THREE.Vector3((Math.random()-0.5)*2.2, (Math.random()-0.5)*1.6, (Math.random()-0.5)*2.2));
   }
-  // nearest neighbors precompute
-  let neighbors=[];
-  function computeNeighbors(){
-    neighbors=agents.map((a,i)=>{
-      const others=agents.map((b,j)=>({j,d:Math.hypot(a.sx-b.sx,a.sy-b.sy)})).filter(o=>o.j!==i).sort((a,b)=>a.d-b.d).slice(0,2).map(o=>o.j);
-      return others;
-    });
+  // colors by team
+  const teamColors=[0x00ff88,0x00d4ff,0x8b5cf6,0xffb020];
+  const colors=new Float32Array(N*3);
+  for(let i=0;i<N;i++){ const c=new Color(teamColors[i%4]); colors[i*3]=c.r; colors[i*3+1]=c.g; colors[i*3+2]=c.b; }
+
+  const posArr=new Float32Array(N*3);
+  scatter.forEach((v,i)=>{posArr[i*3]=v.x;posArr[i*3+1]=v.y;posArr[i*3+2]=v.z;});
+  const geo=new BufferGeometry();
+  geo.setAttribute('position', new Float32BufferAttribute(posArr.slice(),3));
+  geo.setAttribute('color', new Float32BufferAttribute(colors,3));
+  const pts=new Points(geo, new PointsMaterial({size:0.16, vertexColors:true, transparent:true, opacity:0.95, blending:AdditiveBlending, sizeAttenuation:true}));
+  scene.add(pts);
+
+  // nearest-neighbor line segments (static topology)
+  const lineIdx=[];
+  for(let i=0;i<N;i++){
+    // connect to 2 nearest in scatter
+    const others=scatter.map((v,j)=>({j,d:v.distanceTo(scatter[i])})).filter(o=>o.j!==i).sort((a,b)=>a.d-b.d).slice(0,2);
+    others.forEach(o=>{ if(i<o.j){ lineIdx.push(i,o.j); } });
   }
-  init(); computeNeighbors();
-  window.addEventListener('resize',()=>{ctx.setTransform(1,0,0,1,0,0);init();computeNeighbors();});
+  const linePos=new Float32Array(lineIdx.length*3);
+  const lineGeo=new BufferGeometry();
+  lineGeo.setAttribute('position', new Float32BufferAttribute(linePos,3));
+  const lines=new LineSegments(lineGeo, new LineBasicMaterial({color:0x00d4ff, transparent:true, opacity:0.12, blending:AdditiveBlending}));
+  scene.add(lines);
+
+  // central core
+  const core=new Mesh(new IcosahedronGeometry(1.1,3), new MeshBasicMaterial({color:0x00ff88, wireframe:true, transparent:true, opacity:0.5}));
+  scene.add(core);
+  const coreInner=new Mesh(new SphereGeometry(0.55,32,32), new MeshBasicMaterial({color:0x00d4ff, transparent:true, opacity:0.18}));
+  scene.add(coreInner);
+  const coreGlow=new Mesh(new SphereGeometry(1.6,32,32), new MeshBasicMaterial({color:0x00ff88, transparent:true, opacity:0.06, blending:AdditiveBlending}));
+  scene.add(coreGlow);
+
+  // energy particles (flowing along agent->core)
+  const E=400;
+  const ePos=new Float32Array(E*3);
+  const eAgent=new Float32Array(E);
+  for(let i=0;i<E;i++){ eAgent[i]=Math.floor(Math.random()*N); ePos[i*3]=scatter[eAgent[i]].x; ePos[i*3+1]=scatter[eAgent[i]].y; ePos[i*3+2]=scatter[eAgent[i]].z; }
+  const eGeo=new BufferGeometry();
+  eGeo.setAttribute('position', new Float32BufferAttribute(ePos,3));
+  const ePts=new Points(eGeo, new PointsMaterial({size:0.07, color:0x00ff88, transparent:true, opacity:0.9, blending:AdditiveBlending, sizeAttenuation:true}));
+  scene.add(ePts);
+
+  // holographic panel planes (floating)
+  // (kept as HTML overlay instead)
+
+  let progress=0;
+  const ease=t=> t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
 
   // terminal messages
   const term=document.getElementById('agentsTerm');
@@ -668,129 +711,120 @@ typeLoop();
     msgs.forEach((m,idx)=>{
       if(progress>=m.at && !shown.has(idx)){
         shown.add(idx);
-        const line=document.createElement('div');
-        line.className='tline';
+        const line=document.createElement('div'); line.className='tline';
         line.innerHTML=`<span class="aid">${m.text.slice(0,11)}</span> ${m.text.slice(11).replace(/(successful|complete|ready)/i,'<span class="tok">$1</span>')}`;
         term.appendChild(line);
         requestAnimationFrame(()=>line.classList.add('show'));
-        // keep last 6
-        while(term.children.length>6){ term.removeChild(term.firstChild); }
+        while(term.children.length>6) term.removeChild(term.firstChild);
       }
     });
   }
 
-  // dashboard
   const dashActive=document.getElementById('dashActive');
   const dashTasks=document.getElementById('dashTasks');
   const dashStatus=document.getElementById('dashStatus');
   const complete=document.getElementById('agentsComplete');
 
-  function ease(t){return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;}
+  // mouse parallax
+  let mx=0,my=0;
+  container.addEventListener('mousemove',e=>{ const r=container.getBoundingClientRect(); mx=(e.clientX-r.left)/W-0.5; my=(e.clientY-r.top)/H-0.5; });
 
+  let running=true;
   function render(){
-    ctx.clearRect(0,0,W,H);
+    if(!running) return;
     const p=progress;
-    // core
-    const coreR=40 + p*30;
-    const cx=W/2, cy=H/2;
-    // outer glow
-    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,coreR*4);
-    g.addColorStop(0,`rgba(0,255,136,${0.25+p*0.25})`);
-    g.addColorStop(0.4,`rgba(0,212,255,${0.12+p*0.1})`);
-    g.addColorStop(1,'transparent');
-    ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
-    // core circle
-    ctx.beginPath(); ctx.arc(cx,cy,coreR,0,Math.PI*2);
-    const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,coreR);
-    cg.addColorStop(0,'#ffffff'); cg.addColorStop(0.3,'rgba(0,255,136,0.9)'); cg.addColorStop(1,'rgba(0,212,255,0.3)');
-    ctx.fillStyle=cg; ctx.fill();
-    ctx.strokeStyle='rgba(0,255,136,0.6)'; ctx.lineWidth=1.5; ctx.stroke();
-
-    // positions
-    const pts=agents.map((a,i)=>{
-      const t=ease(Math.min(1,p*1.1));
-      const x=a.sx+(a.tx-a.sx)*t;
-      const y=a.sy+(a.ty-a.sy)*t;
-      return {x,y,a,i};
-    });
-
-    // connections to nearest neighbors
+    const t=ease(Math.min(1,p*1.08));
+    // update agent positions
+    const pos=geo.attributes.position.array;
     for(let i=0;i<N;i++){
-      neighbors[i].forEach(j=>{
-        const a=pts[i],b=pts[j];
-        const d=Math.hypot(a.x-b.x,a.y-b.y);
-        const alpha=(0.05+p*0.25)*(1-Math.min(1,d/220));
-        if(alpha>0.01){
-          ctx.strokeStyle=`rgba(0,212,255,${alpha})`;ctx.lineWidth=0.7;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
-        }
-      });
+      pos[i*3]=scatter[i].x+(cluster[i].x-scatter[i].x)*t;
+      pos[i*3+1]=scatter[i].y+(cluster[i].y-scatter[i].y)*t;
+      pos[i*3+2]=scatter[i].z+(cluster[i].z-scatter[i].z)*t;
     }
-    // connections to core when close
-    pts.forEach(pt=>{
-      const d=Math.hypot(pt.x-cx,pt.y-cy);
-      if(d<180){
-        const alpha=(0.15+p*0.4)*(1-d/180);
-        ctx.strokeStyle=`rgba(0,255,136,${alpha})`;ctx.lineWidth=0.9;ctx.beginPath();ctx.moveTo(pt.x,pt.y);ctx.lineTo(cx,cy);ctx.stroke();
-      }
-    });
+    geo.attributes.position.needsUpdate=true;
+    // lines
+    const lp=lines.geometry.attributes.position.array;
+    let li=0;
+    for(let k=0;k<lineIdx.length;k+=2){
+      const i=lineIdx[k], j=lineIdx[k+1];
+      lp[li++]=scatter[i].x+(cluster[i].x-scatter[i].x)*t;
+      lp[li++]=scatter[i].y+(cluster[i].y-scatter[i].y)*t;
+      lp[li++]=scatter[i].z+(cluster[i].z-scatter[i].z)*t;
+      lp[li++]=scatter[j].x+(cluster[j].x-scatter[j].x)*t;
+      lp[li++]=scatter[j].y+(cluster[j].y-scatter[j].y)*t;
+      lp[li++]=scatter[j].z+(cluster[j].z-scatter[j].z)*t;
+    }
+    lines.geometry.attributes.position.needsUpdate=true;
+    lines.material.opacity=0.08+p*0.25;
 
-    // energy particles along lines to core
-    const t=Date.now()/1000;
-    pts.forEach((pt,i)=>{
-      if(Math.hypot(pt.x-cx,pt.y-cy)<260){
-        const k=(t*0.6+i*0.07)%1;
-        const x=pt.x+(cx-pt.x)*k;
-        const y=pt.y+(cy-pt.y)*k;
-        ctx.beginPath();ctx.arc(x,y,1.4,0,Math.PI*2);ctx.fillStyle='rgba(0,255,136,0.9)';ctx.fill();
-      }
-    });
+    // energy particles
+    const ep=ePts.geometry.attributes.position.array;
+    const tt=Date.now()/1000;
+    for(let i=0;i<E;i++){
+      const a=eAgent[i];
+      const ax=scatter[a].x+(cluster[a].x-scatter[a].x)*t;
+      const ay=scatter[a].y+(cluster[a].y-scatter[a].y)*t;
+      const az=scatter[a].z+(cluster[a].z-scatter[a].z)*t;
+      const k=(tt*0.5+i*0.013)%1;
+      ep[i*3]=ax+(0-ax)*k;
+      ep[i*3+1]=ay+(0-ay)*k;
+      ep[i*3+2]=az+(0-az)*k;
+    }
+    ePts.geometry.attributes.position.needsUpdate=true;
+    ePts.material.opacity=0.3+p*0.6;
 
-    // agent nodes
-    pts.forEach(pt=>{
-      const a=pt.a;
-      const color = a.hue===0?'#00ff88':a.hue===1?'#00d4ff':'#8b5cf6';
-      ctx.beginPath();ctx.arc(pt.x,pt.y,a.r,0,Math.PI*2);
-      ctx.fillStyle=color;ctx.shadowColor=color;ctx.shadowBlur=10;ctx.fill();ctx.shadowBlur=0;
-    });
+    // core
+    const coreScale=0.6+p*0.9;
+    core.scale.setScalar(coreScale);
+    core.rotation.x+=0.004; core.rotation.y+=0.006;
+    coreInner.scale.setScalar(0.8+p*0.4);
+    coreInner.rotation.y-=0.005;
+    coreGlow.scale.setScalar(1.2+p*0.6);
+    coreGlow.material.opacity=0.06+p*0.12;
+    core.material.opacity=0.4+p*0.3;
+    // core color shift
+    const hue=0.3+p*0.15;
+    core.material.color.setHSL(hue,1,0.55);
 
-    // labels for agent count (only a few)
-    ctx.font='9px JetBrains Mono';ctx.fillStyle='rgba(154,154,176,0.7)';
-    // done in UI instead
+    // camera parallax
+    camera.position.x+=(mx*1.2-camera.position.x)*0.04;
+    camera.position.y+=(1.5-my*0.8-camera.position.y)*0.04;
+    camera.lookAt(0,0,0);
+
+    // grid pulse
+    grid.material.opacity=0.15+p*0.2;
+
+    scene.background=null;
+    renderer.render(scene,camera);
 
     updateTerm();
-    const active=Math.round(20 + p*80);
-    dashActive.textContent=active;
+    dashActive.textContent=Math.round(20+p*80);
     dashTasks.textContent=Math.floor(p*1247);
     dashStatus.textContent = p<0.3?'INITIALIZING':p<0.6?'ORCHESTRATING':p<0.85?'ASSEMBLING':'OPERATIONAL';
     dashStatus.style.color = p>=0.85?'var(--green)':'var(--blue)';
     if(p>0.88){ complete.classList.add('show'); } else { complete.classList.remove('show'); }
-  }
 
-  let running=true;
-  function loop(){ if(running){ render(); requestAnimationFrame(loop);} }
-  loop();
+    requestAnimationFrame(render);
+  }
+  render();
 
   // ScrollTrigger
   if(window.ScrollTrigger){
     ScrollTrigger.create({
-      trigger:'#agents', start:'top top', end:'bottom bottom', scrub:0.6, pin:'.agents-sticky', anticipatePin:1,
+      trigger:'#agents', start:'top top', end:'bottom bottom', scrub:0.5, pin:'.agents-sticky', anticipatePin:1,
       onUpdate:(self)=>{ progress=self.progress; }
     });
   } else {
-    // fallback: progress by scroll
     window.addEventListener('scroll',()=>{
       const el=document.getElementById('agents'); const r=el.getBoundingClientRect();
       const total=el.offsetHeight-innerHeight; const scrolled=-r.top;
       progress=Math.min(1,Math.max(0,scrolled/total));
     });
   }
-  // resize canvas on container change
-  const ro=new ResizeObserver(()=>{ctx.setTransform(1,0,0,1,0,0);init();computeNeighbors();});
-  ro.observe(canvas);
 })();
 
-// ---------- about canvas ----------
 (function(){
+// ---------- about canvas ----------
   const c=document.getElementById('aboutCanvas'); if(!c) return;
   const ctx=c.getContext('2d');
   let W,H;
