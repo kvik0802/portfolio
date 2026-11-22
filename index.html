@@ -21,24 +21,24 @@
 </script>
 <style>
   :root{
-    --bg:#050505;
-    --bg2:#0a0a0f;
-    --panel:rgba(12,12,20,0.55);
-    --panel-solid:#0e0e16;
-    --line:rgba(255,255,255,0.08);
-    --line-strong:rgba(255,255,255,0.16);
-    --ink:#eaeaf0;
-    --dim:#9a9ab0;
-    --faint:#4a4a5a;
-    --green:#00ff88;
-    --blue:#00d4ff;
-    --violet:#8b5cf6;
+    --bg:#03050f;
+    --bg2:#060a18;
+    --panel:rgba(8,12,30,0.55);
+    --panel-solid:#0a0f22;
+    --line:rgba(255,255,255,0.09);
+    --line-strong:rgba(255,255,255,0.18);
+    --ink:#eaeaf5;
+    --dim:#9aa0c0;
+    --faint:#4a5070;
+    --green:#00e5ff;
+    --blue:#a855f7;
+    --violet:#ff4d9d;
     --amber:#ffb020;
-    --red:#ff5c5c;
+    --red:#ff5c7c;
     --radius:14px;
-    --glow-green:0 0 24px rgba(0,255,136,0.35);
-    --glow-blue:0 0 24px rgba(0,212,255,0.35);
-    --glow-violet:0 0 24px rgba(139,92,246,0.35);
+    --glow-green:0 0 24px rgba(0,229,255,0.4);
+    --glow-blue:0 0 24px rgba(168,85,247,0.4);
+    --glow-violet:0 0 24px rgba(255,77,157,0.4);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:auto;}
@@ -146,7 +146,9 @@
   .dash-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--faint);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;}
   .dash-val{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:var(--green);}
   .dash-val.blue{color:var(--blue);}
-  .agents-term{max-width:900px;margin:0 auto;background:rgba(5,5,5,0.75);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:10px;padding:14px 18px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--dim);min-height:120px;max-height:150px;overflow:hidden;pointer-events:auto;}
+  .brain-labels{position:absolute;left:24px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;pointer-events:none;z-index:2;max-width:200px;}
+  .brain-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.25;transition:opacity .4s,transform .4s, text-shadow .4s;transform:translateX(-8px);}
+  .brain-label.lit{opacity:1;transform:translateX(0);text-shadow:0 0 8px currentColor;}
   .agents-term .tline{opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s;margin-bottom:2px;}
   .agents-term .tline.show{opacity:1;transform:translateY(0);}
   .agents-term .tline .aid{color:var(--blue);}
@@ -323,21 +325,22 @@
       <div class="agents-ui">
         <div class="agents-head">
           <div class="sec-tag" style="margin-bottom:10px;">Signature Experience</div>
-          <h2 class="agents-title">100 AGENTS. <span class="grad">ONE INTELLIGENCE.</span></h2>
-          <div class="agents-sub">Autonomous AI Orchestration Environment · Scroll to progress</div>
+          <h2 class="agents-title">NEURAL <span class="grad">MIND MAP.</span></h2>
+          <div class="agents-sub">Autonomous Skill Orchestration · Scroll to light up the mind</div>
         </div>
         <div class="agents-dash">
-          <div class="dash-card"><div class="dash-label">Total Agents</div><div class="dash-val blue">100</div></div>
-          <div class="dash-card"><div class="dash-label">Active Agents</div><div class="dash-val" id="dashActive">0</div></div>
-          <div class="dash-card"><div class="dash-label">Tasks Completed</div><div class="dash-val" id="dashTasks">0</div></div>
-          <div class="dash-card"><div class="dash-label">System Status</div><div class="dash-val" id="dashStatus" style="font-size:16px;">INITIALIZING</div></div>
+          <div class="dash-card"><div class="dash-label">Skill Domains</div><div class="dash-val blue">8</div></div>
+          <div class="dash-card"><div class="dash-label">Active Regions</div><div class="dash-val" id="dashActive">0</div></div>
+          <div class="dash-card"><div class="dash-label">Concepts Lit</div><div class="dash-val" id="dashTasks">0</div></div>
+          <div class="dash-card"><div class="dash-label">Mind Status</div><div class="dash-val" id="dashStatus" style="font-size:16px;">DORMANT</div></div>
         </div>
         <div class="agents-term" id="agentsTerm"></div>
+        <div id="brainLabels" class="brain-labels"></div>
       </div>
       <div class="agents-complete" id="agentsComplete">
         <div class="complete-card">
-          <h3>Deployment Successful</h3>
-          <p>100 autonomous agents collaborated to assemble this intelligent system. Scroll up to replay the orchestration.</p>
+          <h3>Neural Map Complete</h3>
+          <p>All 8 skill domains are lit. The mind is fully mapped — scroll up to replay the activation.</p>
         </div>
       </div>
     </div>
@@ -596,19 +599,19 @@ typeLoop();
       if(d<200){p.vx+=dx/d*0.012;p.vy+=dy/d*0.012;}
       p.vx*=0.99;p.vy*=0.99;
       ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=p.hue===0?'rgba(0,255,136,0.85)':'rgba(0,212,255,0.85)';ctx.fill();
-      ctx.shadowColor=p.hue===0?'#00ff88':'#00d4ff';ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;
+      ctx.fillStyle=p.hue===0?'rgba(0,229,255,0.85)':'rgba(168,85,247,0.85)';ctx.fill();
+      ctx.shadowColor=p.hue===0?'#00e5ff':'#a855f7';ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0;
     });
     // central core glow
     const cx=W*0.72,cy=H*0.45;
     const g=ctx.createRadialGradient(cx,cy,0,cx,cy,180);
-    g.addColorStop(0,'rgba(0,255,136,0.18)');g.addColorStop(0.5,'rgba(0,212,255,0.08)');g.addColorStop(1,'transparent');
+    g.addColorStop(0,'rgba(0,229,255,0.18)');g.addColorStop(0.5,'rgba(168,85,247,0.08)');g.addColorStop(1,'transparent');
     ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
     requestAnimationFrame(draw);
   }
   draw();
 })();
-// ---------- 100 AGENTS SIGNATURE (3D) ----------
+// ---------- NEURAL MIND MAP (3D BRAIN) ----------
 (async function(){
   const canvas=document.getElementById('agentsCanvas'); if(!canvas) return;
   const THREE=await import('three');
@@ -618,101 +621,128 @@ typeLoop();
   const renderer=new WebGLRenderer({canvas, alpha:true, antialias:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   const scene=new Scene();
-  scene.fog=new FogExp2(0x050505, 0.06);
-  const camera=new PerspectiveCamera(60, 1, 0.1, 100);
-  camera.position.set(0, 1.5, 9);
+  scene.fog=new FogExp2(0x03050f, 0.05);
+  const camera=new PerspectiveCamera(55, 1, 0.1, 100);
+  camera.position.set(0, 0, 9);
 
   let W=container.clientWidth, H=container.clientHeight;
   function resize(){ W=container.clientWidth; H=container.clientHeight; renderer.setSize(W,H,false); camera.aspect=W/H; camera.updateProjectionMatrix(); }
   resize();
   window.addEventListener('resize', resize);
 
-  // grid floor
-  const grid=new GridHelper(20, 40, 0x00ff88, 0x1a1a2e);
-  grid.position.y=-3; grid.material.opacity=0.25; grid.material.transparent=true;
+  // grid
+  const grid=new GridHelper(20, 40, 0x00e5ff, 0x1a1040);
+  grid.position.y=-3.2; grid.material.opacity=0.18; grid.material.transparent=true;
   scene.add(grid);
 
-  const N=100;
-  // scatter positions (sphere shell)
-  const scatter=[]; const cluster=[];
+  // brain shape: two hemispheres of nodes
+  const N=160;
+  const nodes=[]; // {pos: Vector3, region: int}
+  const regions=[
+    {name:'Machine Learning', color:0x00e5ff},
+    {name:'Deep Learning', color:0xa855f7},
+    {name:'Neural Networks', color:0xff4d9d},
+    {name:'NLP', color:0x00e5ff},
+    {name:'Computer Vision', color:0xa855f7},
+    {name:'LLMs', color:0xff4d9d},
+    {name:'RAG Systems', color:0x00e5ff},
+    {name:'Agentic AI', color:0xa855f7},
+  ];
+  const R=regions.length;
+  // generate brain nodes
   for(let i=0;i<N;i++){
-    const a=Math.random()*Math.PI*2; const b=Math.acos(2*Math.random()-1);
-    const r=5.5+Math.random()*1.5;
-    scatter.push(new THREE.Vector3(Math.sin(b)*Math.cos(a)*r, Math.sin(b)*Math.sin(a)*r*0.6, Math.cos(b)*r));
-    cluster.push(new THREE.Vector3((Math.random()-0.5)*2.2, (Math.random()-0.5)*1.6, (Math.random()-0.5)*2.2));
+    // spherical with brain deformation
+    const u=Math.random()*Math.PI*2;
+    const v=Math.acos(2*Math.random()-1);
+    let r=2.6;
+    // flatten vertically, widen
+    const x=r*Math.sin(v)*Math.cos(u)*1.15;
+    const y=r*Math.cos(v)*0.75;
+    const z=r*Math.sin(v)*Math.sin(u)*0.95;
+    // central fissure: push nodes away from x=0 slightly
+    const xx = x + (x>=0?0.15:-0.15);
+    const pos=new THREE.Vector3(xx,y,z);
+    // region by octant-ish: use angle around y + height
+    let region;
+    if(y>0.8) region=1; // top -> deep learning
+    else if(y<-0.8) region=6; // bottom -> rag
+    else {
+      const ang=Math.atan2(z,x); // -pi..pi
+      const idx=Math.floor(((ang+Math.PI)/(Math.PI*2))*6);
+      region=[0,3,7,2,5,4][Math.max(0,Math.min(5,idx))];
+    }
+    nodes.push({pos, region, base:pos.clone()});
   }
-  // colors by team
-  const teamColors=[0x00ff88,0x00d4ff,0x8b5cf6,0xffb020];
-  const colors=new Float32Array(N*3);
-  for(let i=0;i<N;i++){ const c=new Color(teamColors[i%4]); colors[i*3]=c.r; colors[i*3+1]=c.g; colors[i*3+2]=c.b; }
 
+  // group node indices by region
+  const regionNodes=Array.from({length:R},()=>[]);
+  nodes.forEach((n,i)=>regionNodes[n.region].push(i));
+
+  // colors array
+  const colors=new Float32Array(N*3);
+  nodes.forEach((n,i)=>{
+    const c=new Color(regions[n.region].color);
+    colors[i*3]=c.r*0.35; colors[i*3+1]=c.g*0.35; colors[i*3+2]=c.b*0.35;
+  });
   const posArr=new Float32Array(N*3);
-  scatter.forEach((v,i)=>{posArr[i*3]=v.x;posArr[i*3+1]=v.y;posArr[i*3+2]=v.z;});
+  nodes.forEach((n,i)=>{posArr[i*3]=n.pos.x;posArr[i*3+1]=n.pos.y;posArr[i*3+2]=n.pos.z;});
   const geo=new BufferGeometry();
   geo.setAttribute('position', new Float32BufferAttribute(posArr.slice(),3));
   geo.setAttribute('color', new Float32BufferAttribute(colors,3));
-  const pts=new Points(geo, new PointsMaterial({size:0.16, vertexColors:true, transparent:true, opacity:0.95, blending:AdditiveBlending, sizeAttenuation:true}));
+  const pts=new Points(geo, new PointsMaterial({size:0.13, vertexColors:true, transparent:true, opacity:0.9, blending:AdditiveBlending, sizeAttenuation:true}));
   scene.add(pts);
 
-  // nearest-neighbor line segments (static topology)
+  // connections: nearest neighbors within brain
   const lineIdx=[];
   for(let i=0;i<N;i++){
-    // connect to 2 nearest in scatter
-    const others=scatter.map((v,j)=>({j,d:v.distanceTo(scatter[i])})).filter(o=>o.j!==i).sort((a,b)=>a.d-b.d).slice(0,2);
-    others.forEach(o=>{ if(i<o.j){ lineIdx.push(i,o.j); } });
+    const others=nodes.map((n,j)=>({j,d:nodes[i].pos.distanceTo(n.pos)})).filter(o=>o.j!==i).sort((a,b)=>a.d-b.d).slice(0,3);
+    others.forEach(o=>{ if(i<o.j) lineIdx.push(i,o.j); });
   }
   const linePos=new Float32Array(lineIdx.length*3);
   const lineGeo=new BufferGeometry();
   lineGeo.setAttribute('position', new Float32BufferAttribute(linePos,3));
-  const lines=new LineSegments(lineGeo, new LineBasicMaterial({color:0x00d4ff, transparent:true, opacity:0.12, blending:AdditiveBlending}));
+  const lines=new LineSegments(lineGeo, new LineBasicMaterial({color:0x00e5ff, transparent:true, opacity:0.08, blending:AdditiveBlending}));
   scene.add(lines);
 
-  // central core
-  const core=new Mesh(new IcosahedronGeometry(1.1,3), new MeshBasicMaterial({color:0x00ff88, wireframe:true, transparent:true, opacity:0.5}));
+  // core (central)
+  const core=new Mesh(new IcosahedronGeometry(0.7,2), new MeshBasicMaterial({color:0x00e5ff, wireframe:true, transparent:true, opacity:0.4}));
   scene.add(core);
-  const coreInner=new Mesh(new SphereGeometry(0.55,32,32), new MeshBasicMaterial({color:0x00d4ff, transparent:true, opacity:0.18}));
+  const coreInner=new Mesh(new SphereGeometry(0.35,24,24), new MeshBasicMaterial({color:0xa855f7, transparent:true, opacity:0.2}));
   scene.add(coreInner);
-  const coreGlow=new Mesh(new SphereGeometry(1.6,32,32), new MeshBasicMaterial({color:0x00ff88, transparent:true, opacity:0.06, blending:AdditiveBlending}));
-  scene.add(coreGlow);
 
-  // energy particles (flowing along agent->core)
-  const E=400;
+  // energy particles
+  const E=300;
   const ePos=new Float32Array(E*3);
-  const eAgent=new Float32Array(E);
-  for(let i=0;i<E;i++){ eAgent[i]=Math.floor(Math.random()*N); ePos[i*3]=scatter[eAgent[i]].x; ePos[i*3+1]=scatter[eAgent[i]].y; ePos[i*3+2]=scatter[eAgent[i]].z; }
+  const eRegion=new Float32Array(E);
+  for(let i=0;i<E;i++){ const r=Math.floor(Math.random()*N); eRegion[i]=nodes[r].region; ePos[i*3]=nodes[r].pos.x; ePos[i*3+1]=nodes[r].pos.y; ePos[i*3+2]=nodes[r].pos.z; }
   const eGeo=new BufferGeometry();
   eGeo.setAttribute('position', new Float32BufferAttribute(ePos,3));
-  const ePts=new Points(eGeo, new PointsMaterial({size:0.07, color:0x00ff88, transparent:true, opacity:0.9, blending:AdditiveBlending, sizeAttenuation:true}));
+  const ePts=new Points(eGeo, new PointsMaterial({size:0.06, color:0xffffff, transparent:true, opacity:0.0, blending:AdditiveBlending, sizeAttenuation:true}));
   scene.add(ePts);
-
-  // holographic panel planes (floating)
-  // (kept as HTML overlay instead)
 
   let progress=0;
   const ease=t=> t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
 
-  // terminal messages
+  // terminal messages per region
   const term=document.getElementById('agentsTerm');
-  const msgs=[
-    {at:0.02,text:'[AGENT 001] Initializing intelligence core...'},
-    {at:0.06,text:'[AGENT 014] Designing neural architecture...'},
-    {at:0.12,text:'[AGENT 027] Building frontend components...'},
-    {at:0.18,text:'[AGENT 039] Connecting retrieval pipelines...'},
-    {at:0.26,text:'[AGENT 052] Training machine learning models...'},
-    {at:0.34,text:'[AGENT 068] Running security validation...'},
-    {at:0.44,text:'[AGENT 073] Orchestrating multi-agent workflows...'},
-    {at:0.54,text:'[AGENT 084] Testing autonomous workflows...'},
-    {at:0.66,text:'[AGENT 091] Optimizing RAG retrieval accuracy...'},
-    {at:0.78,text:'[AGENT 097] Compiling deployment bundle...'},
-    {at:0.92,text:'[AGENT 100] Deployment successful.'},
+  const regionMsgs=[
+    {at:0.05, text:'[REGION 01] Machine Learning cortex activated...'},
+    {at:0.14, text:'[REGION 02] Deep Learning pathways online...'},
+    {at:0.24, text:'[REGION 03] Neural network topology mapped...'},
+    {at:0.34, text:'[REGION 04] NLP language centers engaged...'},
+    {at:0.44, text:'[REGION 05] Computer Vision systems ready...'},
+    {at:0.54, text:'[REGION 06] LLM reasoning engine loaded...'},
+    {at:0.64, text:'[REGION 07] RAG retrieval pipelines connected...'},
+    {at:0.74, text:'[REGION 08] Agentic AI orchestration live...'},
+    {at:0.88, text:'[MIND] Full neural map complete.'},
   ];
   const shown=new Set();
   function updateTerm(){
-    msgs.forEach((m,idx)=>{
+    regionMsgs.forEach((m,idx)=>{
       if(progress>=m.at && !shown.has(idx)){
         shown.add(idx);
         const line=document.createElement('div'); line.className='tline';
-        line.innerHTML=`<span class="aid">${m.text.slice(0,11)}</span> ${m.text.slice(11).replace(/(successful|complete|ready)/i,'<span class="tok">$1</span>')}`;
+        line.innerHTML=`<span class="aid">${m.text.slice(0,11)}</span> ${m.text.slice(11).replace(/(complete|online|ready|live|activated|engaged|loaded|connected|mapped)/i,'<span class="tok">$1</span>')}`;
         term.appendChild(line);
         requestAnimationFrame(()=>line.classList.add('show'));
         while(term.children.length>6) term.removeChild(term.firstChild);
@@ -725,90 +755,115 @@ typeLoop();
   const dashStatus=document.getElementById('dashStatus');
   const complete=document.getElementById('agentsComplete');
 
-  // mouse parallax
+  // skill labels overlay
+  const labelsWrap=document.getElementById('brainLabels');
+  // create labels
+  if(labelsWrap){
+    regions.forEach((r,i)=>{
+      const el=document.createElement('div');
+      el.className='brain-label';
+      el.textContent=r.name;
+      el.style.color='#'+r.color.toString(16).padStart(6,'0');
+      labelsWrap.appendChild(el);
+    });
+  }
+
   let mx=0,my=0;
   container.addEventListener('mousemove',e=>{ const r=container.getBoundingClientRect(); mx=(e.clientX-r.left)/W-0.5; my=(e.clientY-r.top)/H-0.5; });
 
-  let running=true;
   function render(){
-    if(!running) return;
     const p=progress;
-    const t=ease(Math.min(1,p*1.08));
-    // update agent positions
-    const pos=geo.attributes.position.array;
-    for(let i=0;i<N;i++){
-      pos[i*3]=scatter[i].x+(cluster[i].x-scatter[i].x)*t;
-      pos[i*3+1]=scatter[i].y+(cluster[i].y-scatter[i].y)*t;
-      pos[i*3+2]=scatter[i].z+(cluster[i].z-scatter[i].z)*t;
-    }
+    const t=ease(Math.min(1,p*1.05));
+    // region activation: region i activates when t > i/R
+    const regionActive=regions.map((_,i)=> t > (i+0.5)/R );
+
+    // update node colors
+    const cArr=geo.attributes.color.array;
+    nodes.forEach((n,i)=>{
+      const active=regionActive[n.region];
+      const base=new Color(regions[n.region].color);
+      const intensity = active ? (0.55 + 0.45*Math.min(1,(t-(n.region+0.5)/R)*R)) : 0.2;
+      cArr[i*3]=base.r*intensity;
+      cArr[i*3+1]=base.g*intensity;
+      cArr[i*3+2]=base.b*intensity;
+    });
+    geo.attributes.color.needsUpdate=true;
+
+    // subtle node drift
+    const tt=Date.now()/1000;
+    const pArr=geo.attributes.position.array;
+    nodes.forEach((n,i)=>{
+      const drift=Math.sin(tt*0.6+i)*0.02;
+      pArr[i*3]=n.pos.x+drift;
+      pArr[i*3+1]=n.pos.y+Math.cos(tt*0.5+i)*0.02;
+      pArr[i*3+2]=n.pos.z;
+    });
     geo.attributes.position.needsUpdate=true;
+
     // lines
     const lp=lines.geometry.attributes.position.array;
     let li=0;
     for(let k=0;k<lineIdx.length;k+=2){
       const i=lineIdx[k], j=lineIdx[k+1];
-      lp[li++]=scatter[i].x+(cluster[i].x-scatter[i].x)*t;
-      lp[li++]=scatter[i].y+(cluster[i].y-scatter[i].y)*t;
-      lp[li++]=scatter[i].z+(cluster[i].z-scatter[i].z)*t;
-      lp[li++]=scatter[j].x+(cluster[j].x-scatter[j].x)*t;
-      lp[li++]=scatter[j].y+(cluster[j].y-scatter[j].y)*t;
-      lp[li++]=scatter[j].z+(cluster[j].z-scatter[j].z)*t;
+      lp[li++]=nodes[i].pos.x; lp[li++]=nodes[i].pos.y; lp[li++]=nodes[i].pos.z;
+      lp[li++]=nodes[j].pos.x; lp[li++]=nodes[j].pos.y; lp[li++]=nodes[j].pos.z;
     }
     lines.geometry.attributes.position.needsUpdate=true;
-    lines.material.opacity=0.08+p*0.25;
+    lines.material.opacity=0.06+t*0.18;
 
-    // energy particles
+    // energy particles for active regions
     const ep=ePts.geometry.attributes.position.array;
-    const tt=Date.now()/1000;
     for(let i=0;i<E;i++){
-      const a=eAgent[i];
-      const ax=scatter[a].x+(cluster[a].x-scatter[a].x)*t;
-      const ay=scatter[a].y+(cluster[a].y-scatter[a].y)*t;
-      const az=scatter[a].z+(cluster[a].z-scatter[a].z)*t;
-      const k=(tt*0.5+i*0.013)%1;
-      ep[i*3]=ax+(0-ax)*k;
-      ep[i*3+1]=ay+(0-ay)*k;
-      ep[i*3+2]=az+(0-az)*k;
+      const r=Math.floor(eRegion[i]);
+      const active=regionActive[r];
+      const src=nodes.find((n,idx)=>n.region===r && idx===Math.floor(Math.random()*N)) || nodes[0];
+      // pick a node in region r
+      const candidates=regionNodes[r];
+      const ni=candidates[Math.floor(Math.random()*candidates.length)];
+      const n=nodes[ni];
+      if(active){
+        const k=(tt*0.4+i*0.017)%1;
+        ep[i*3]=n.pos.x*(1-k);
+        ep[i*3+1]=n.pos.y*(1-k);
+        ep[i*3+2]=n.pos.z*(1-k);
+      } else {
+        ep[i*3]=n.pos.x; ep[i*3+1]=n.pos.y; ep[i*3+2]=n.pos.z;
+      }
     }
     ePts.geometry.attributes.position.needsUpdate=true;
-    ePts.material.opacity=0.3+p*0.6;
+    ePts.material.opacity = t*0.7;
 
     // core
-    const coreScale=0.6+p*0.9;
-    core.scale.setScalar(coreScale);
-    core.rotation.x+=0.004; core.rotation.y+=0.006;
-    coreInner.scale.setScalar(0.8+p*0.4);
-    coreInner.rotation.y-=0.005;
-    coreGlow.scale.setScalar(1.2+p*0.6);
-    coreGlow.material.opacity=0.06+p*0.12;
-    core.material.opacity=0.4+p*0.3;
-    // core color shift
-    const hue=0.3+p*0.15;
-    core.material.color.setHSL(hue,1,0.55);
+    core.rotation.x+=0.003; core.rotation.y+=0.005;
+    core.scale.setScalar(0.7+t*0.6);
+    core.material.opacity=0.35+t*0.4;
+    coreInner.scale.setScalar(0.6+t*0.5);
+    coreInner.rotation.y-=0.004;
 
     // camera parallax
-    camera.position.x+=(mx*1.2-camera.position.x)*0.04;
-    camera.position.y+=(1.5-my*0.8-camera.position.y)*0.04;
+    camera.position.x+=(mx*0.8-camera.position.x)*0.04;
+    camera.position.y+=( -my*0.6-camera.position.y)*0.04;
     camera.lookAt(0,0,0);
 
-    // grid pulse
-    grid.material.opacity=0.15+p*0.2;
+    grid.material.opacity=0.12+t*0.15;
 
-    scene.background=null;
     renderer.render(scene,camera);
 
     updateTerm();
-    dashActive.textContent=Math.round(20+p*80);
-    dashTasks.textContent=Math.floor(p*1247);
-    dashStatus.textContent = p<0.3?'INITIALIZING':p<0.6?'ORCHESTRATING':p<0.85?'ASSEMBLING':'OPERATIONAL';
-    dashStatus.style.color = p>=0.85?'var(--green)':'var(--blue)';
-    if(p>0.88){ complete.classList.add('show'); } else { complete.classList.remove('show'); }
-
+    // light up labels
+    if(labelsWrap){
+      const lbls=labelsWrap.querySelectorAll('.brain-label');
+      lbls.forEach((el,i)=>{ if(regionActive[i]) el.classList.add('lit'); else el.classList.remove('lit'); });
+    }
+    dashActive.textContent=regionActive.filter(Boolean).length;
+    dashTasks.textContent=Math.floor(t*847);
+    dashStatus.textContent = t<0.2?'DORMANT':t<0.6?'ACTIVATING':t<0.85?'MAPPING':'ONLINE';
+    dashStatus.style.color = t>=0.85?'var(--green)':'var(--blue)';
+    if(t>0.9){ complete.classList.add('show'); } else { complete.classList.remove('show'); }
     requestAnimationFrame(render);
   }
   render();
 
-  // ScrollTrigger
   if(window.ScrollTrigger){
     ScrollTrigger.create({
       trigger:'#agents', start:'top top', end:'bottom bottom', scrub:0.5, pin:'.agents-sticky', anticipatePin:1,
@@ -822,6 +877,7 @@ typeLoop();
     });
   }
 })();
+
 
 (function(){
 // ---------- about canvas ----------
@@ -882,15 +938,15 @@ typeLoop();
     container.appendChild(renderer.domElement);
     renderer.domElement.style.position='absolute';renderer.domElement.style.inset='0';
     // core
-    const core=new Mesh(new IcosahedronGeometry(1.1,2), new MeshBasicMaterial({color:0x00ff88,wireframe:true,transparent:true,opacity:0.55}));
+    const core=new Mesh(new IcosahedronGeometry(1.1,2), new MeshBasicMaterial({color:0x00e5ff,wireframe:true,transparent:true,opacity:0.55}));
     scene.add(core);
-    const inner=new Mesh(new SphereGeometry(0.6,24,24), new MeshBasicMaterial({color:0x00d4ff,transparent:true,opacity:0.15}));
+    const inner=new Mesh(new SphereGeometry(0.6,24,24), new MeshBasicMaterial({color:0xa855f7,transparent:true,opacity:0.18}));
     scene.add(inner);
     // particles
     const cnt=700; const pos=new Float32Array(cnt*3);
     for(let i=0;i<cnt;i++){pos[i*3]=(Math.random()-0.5)*12;pos[i*3+1]=(Math.random()-0.5)*12;pos[i*3+2]=(Math.random()-0.5)*12;}
     const geo=new BufferGeometry(); geo.setAttribute('position',new Float32BufferAttribute(pos,3));
-    const pts=new Points(geo,new PointsMaterial({color:0x00ff88,size:0.025,transparent:true,opacity:0.7,blending:AdditiveBlending}));
+    const pts=new Points(geo,new PointsMaterial({color:0x00e5ff,size:0.025,transparent:true,opacity:0.7,blending:AdditiveBlending}));
     scene.add(pts);
     let mx=0,my=0; window.addEventListener('mousemove',e=>{mx=(e.clientX/innerWidth-0.5)*0.6;my=(e.clientY/innerHeight-0.5)*0.6;});
     function anim(){ requestAnimationFrame(anim); core.rotation.x+=0.003; core.rotation.y+=0.005; inner.rotation.y-=0.004; pts.rotation.y+=0.0008; camera.position.x+=(mx-camera.position.x)*0.05; camera.position.y+=(-my-camera.position.y)*0.05; camera.lookAt(0,0,0); renderer.render(scene, camera); }
