@@ -505,7 +505,7 @@ const progInterval = setInterval(() => {
   ldrProgress += Math.random() * 12 + 4;
   if (ldrProgress >= 100) { ldrProgress = 100; clearInterval(progInterval); }
   loaderFill.style.width = ldrProgress + '%';
-  if (progress >= 100) {
+  if (ldrProgress >= 100) {
     setTimeout(() => {
       document.getElementById('loader').classList.add('hide');
       clearInterval(loaderInterval);
