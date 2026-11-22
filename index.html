@@ -213,7 +213,8 @@
       <div class="line">$ init --profile=naini_vivekanand</div>
       <div class="line"><span class="ok">✓</span> role: ai/ml engineer, llm agents, rag & production ai</div>
       <div class="line"><span class="ok">✓</span> location: hyderabad, telangana, in</div>
-      <div class="line"><span class="ok">✓</span> repos: 27 total (25 public · 2 private client)</div>
+      <div class="line"><span class="ok">✓</span> github repos: 27 total (21 public · 6 private)</div>
+      <div class="line"><span class="ok">✓</span> projects shown: 26 (19 public · 5 private gh · 2 private client)</div>
       <div class="line">$ status: open to opportunities<span class="cursor"></span></div>
     </div>
 
@@ -399,14 +400,14 @@ resize();
 const repos = [
  {name:'Production RAG System (Retrieval Evaluation)',lang:'FastAPI, Docker, BM25, Embeddings',vis:'priv',desc:'Hybrid search pipeline (BM25 + embeddings) with reranker; measured recall, MRR, and answer faithfulness on a hand-labeled set against a keyword-only baseline. Automated regression tests for retrieval/prompt changes.',url:''},
  {name:'TruText - AI Document Intelligence Platform',lang:'Python, OCR, LLMs, RAG, FastAPI',vis:'priv',desc:'Processes Texas SNAP documents via PDF extraction, OCR, and LLMs to identify critical info, classify documents, and generate simplified bilingual explanations. Privacy-aware extraction, evidence-grounded RAG. (In Progress)',url:''},
- {name:'AIRA - Autonomous AI Agent System (BrainOS)',lang:'Python, LLM routing, Ollama',vis:'pub',desc:'Autonomous agent platform with structured validated LLM outputs, graceful fallbacks, request routing across multiple providers with failover. Modular cognitive architecture with permission threading, observability, governance; 0→800+ tests.',url:'https://github.com/kvik0802/AIRA'},
+ {name:'AIRA - Autonomous AI Agent System (BrainOS)',lang:'Python, LLM routing, Ollama',vis:'priv',desc:'Autonomous agent platform with structured validated LLM outputs, graceful fallbacks, request routing across multiple providers with failover. Modular cognitive architecture with permission threading, observability, governance; 0→800+ tests.',url:'https://github.com/kvik0802/AIRA'},
  {name:'Agent Guardian',lang:'Python, FastAPI, GPT-4o-mini, Next.js',vis:'pub',desc:'Middleware between agent and its actions: real-time risk scoring, human approval for risky actions, rollback. Dashboards to monitor agent behavior and policy compliance.',url:'https://github.com/kvik0802/agent-guardian'},
- {name:'AIRA-CLI-2',lang:'Rust',vis:'pub',desc:'Autonomous Intelligence & Reasoning Agent — terminal, desktop, gateway, and BrainOS cognition in one stack with verified memory integrity.',url:'https://github.com/kvik0802/AIRA-CLI-2'},
- {name:'A.I.R.A-CLI',lang:'Rust',vis:'pub',desc:'AI-powered CLI with 65+ commands, multi-provider LLM support, persistent memory, and autonomous file operations.',url:'https://github.com/kvik0802/A.I.R.A-CLI'},
+ {name:'AIRA-CLI-2',lang:'Rust',vis:'priv',desc:'Autonomous Intelligence & Reasoning Agent — terminal, desktop, gateway, and BrainOS cognition in one stack with verified memory integrity.',url:'https://github.com/kvik0802/AIRA-CLI-2'},
+ {name:'A.I.R.A-CLI',lang:'Rust',vis:'priv',desc:'AI-powered CLI with 65+ commands, multi-provider LLM support, persistent memory, and autonomous file operations.',url:'https://github.com/kvik0802/A.I.R.A-CLI'},
  {name:'aira-brainos-core',lang:'Python',vis:'pub',desc:'Self-contained cognitive system that learns from experience without LLMs or transformers.',url:'https://github.com/kvik0802/aira-brainos-core'},
  {name:'AIRA-LLM',lang:'-',vis:'pub',desc:'Custom-trained 7B AI model optimized for general-purpose tasks with Ollama integration.',url:'https://github.com/kvik0802/AIRA-LLM'},
  {name:'AIRA-V1-RSL',lang:'Python',vis:'pub',desc:'AIRA v1 reinforcement / self-learning experiments.',url:'https://github.com/kvik0802/AIRA-V1-RSL'},
- {name:'AIRAOS',lang:'TypeScript',vis:'pub',desc:'AIRA operating system layer.',url:'https://github.com/kvik0802/AIRAOS'},
+ {name:'AIRAOS',lang:'TypeScript',vis:'priv',desc:'AIRA operating system layer.',url:'https://github.com/kvik0802/AIRAOS'},
  {name:'RL-EvalBench',lang:'Python',vis:'pub',desc:'Frontier Reinforcement Learning Environment & Dynamic Code Verification Engine for LLM Agents.',url:'https://github.com/kvik0802/RL-EvalBench'},
  {name:'OmniQuery-NL2SQL-Agent',lang:'Python',vis:'pub',desc:'Autonomous NL-to-SQL Analytics Agent powered by LangGraph, schema knowledge graphs, SQL AST guardrails, and auto-visualizations.',url:'https://github.com/kvik0802/OmniQuery-NL2SQL-Agent'},
  {name:'llm-eval-query-engine',lang:'Python',vis:'pub',desc:'LLM evaluation query engine.',url:'https://github.com/kvik0802/llm-eval-query-engine'},
@@ -414,8 +415,8 @@ const repos = [
  {name:'ANN-Detection-System',lang:'Jupyter Notebook',vis:'pub',desc:'Intelligent Anti-Money Laundering Detection System using ANNs — real-time transaction screening with TensorFlow/Keras and Streamlit.',url:'https://github.com/kvik0802/ANN-Detection-System'},
  {name:'omniscient-terminal',lang:'TypeScript',vis:'pub',desc:'Dark-themed mission control dashboard for financial markets intelligence — live charts, AI predictions, trade signals, paper trading.',url:'https://github.com/kvik0802/omniscient-terminal'},
  {name:'particle-manipulator',lang:'HTML',vis:'pub',desc:'Interactive 3D particle morphing engine — 150K WebGL particles transforming between shapes and cosmic formations.',url:'https://github.com/kvik0802/particle-manipulator'},
- {name:'blood-bank-locator',lang:'TypeScript',vis:'pub',desc:'Life-saving blood bank discovery platform connecting patients with nearby banks in real-time across 86 banks in 37 countries.',url:'https://github.com/kvik0802/blood-bank-locator'},
- {name:'NSS-ENTERPRISES',lang:'TypeScript',vis:'pub',desc:'NSS enterprises nest interior elements.',url:'https://github.com/kvik0802/NSS-ENTERPRISES'},
+ {name:'blood-bank-locator',lang:'TypeScript',vis:'priv',desc:'Life-saving blood bank discovery platform connecting patients with nearby banks in real-time across 86 banks in 37 countries.',url:'https://github.com/kvik0802/blood-bank-locator'},
+
  {name:'Skyline-weather-app',lang:'JavaScript',vis:'pub',desc:'Skyline weather application.',url:'https://github.com/kvik0802/Skyline-weather-app'},
  {name:'IPL-Prediction-using-ML',lang:'Python',vis:'pub',desc:'ML project: IPL prediction deployed to GitHub / Hugging Face / Streamlit cloud.',url:'https://github.com/kvik0802/IPL-Prediction-using-ML'},
  {name:'tataiplmatchprediction',lang:'Python',vis:'pub',desc:'Tata IPL match prediction.',url:'https://github.com/kvik0802/tataiplmatchprediction'},
