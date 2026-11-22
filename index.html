@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Naini Vivekanand — Generative AI Engineer | Matrix Portfolio</title>
+<title>Naini Vivekanand — AI/ML Engineer | Matrix Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -35,28 +35,19 @@
   ::selection{ background:var(--green); color:#000; }
   a{ color:inherit; text-decoration:none; }
 
-  /* Matrix canvas - pixelated rain */
   #matrix{
     position:fixed; inset:0; z-index:0;
     width:100%; height:100%;
     image-rendering:pixelated;
     pointer-events:none;
   }
-  /* CRT overlay */
   .crt{
     position:fixed; inset:0; z-index:1; pointer-events:none;
-    background:
-      radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
   }
   .scanlines{
     position:fixed; inset:0; z-index:2; pointer-events:none;
-    background: repeating-linear-gradient(
-      to bottom,
-      rgba(0,255,65,0.06) 0px,
-      rgba(0,255,65,0.06) 1px,
-      transparent 1px,
-      transparent 3px
-    );
+    background: repeating-linear-gradient(to bottom, rgba(0,255,65,0.06) 0px, rgba(0,255,65,0.06) 1px, transparent 1px, transparent 3px);
     mix-blend-mode:screen;
   }
   .noise{
@@ -68,18 +59,13 @@
   .mono{ font-family:'Share Tech Mono', monospace; }
   .pixel{ font-family:'Press Start 2P', monospace; }
 
-  /* Pixel border utility */
   .px-border{
     border:2px solid var(--green);
-    box-shadow:
-      2px 0 0 0 var(--green), -2px 0 0 0 var(--green),
-      0 2px 0 0 var(--green), 0 -2px 0 0 var(--green),
-      4px 4px 0 0 var(--ink-faint);
+    box-shadow: 2px 0 0 0 var(--green), -2px 0 0 0 var(--green), 0 2px 0 0 var(--green), 0 -2px 0 0 var(--green), 4px 4px 0 0 var(--ink-faint);
     background:rgba(0,10,0,0.72);
     backdrop-filter: blur(2px);
   }
 
-  /* ---------- NAV ---------- */
   header{
     position:sticky; top:0; z-index:50;
     background:rgba(0,0,0,0.85);
@@ -95,12 +81,11 @@
   .navlinks a:hover{ color:var(--green); text-shadow:0 0 6px var(--green); }
   .navlinks a::before{ content:'>'; margin-right:4px; color:var(--ink-faint); }
 
-  /* ---------- HERO ---------- */
   .hero{ position:relative; z-index:3; padding:60px 0 40px; }
   .boot{
     font-family:'Share Tech Mono', monospace; font-size:16px; color:var(--ink-dim);
     border:2px solid var(--green); background:rgba(0,18,0,0.8);
-    padding:14px 18px; max-width:600px; margin-bottom:30px;
+    padding:14px 18px; max-width:620px; margin-bottom:30px;
     box-shadow:4px 4px 0 0 var(--ink-faint);
   }
   .boot .line{ white-space:pre; }
@@ -112,7 +97,7 @@
   @media (max-width: 880px){ .hero-grid{ grid-template-columns:1fr; } }
 
   .eyebrow{ font-family:'Press Start 2P', monospace; font-size:10px; letter-spacing:0.1em; color:var(--amber); margin-bottom:16px; text-shadow:0 0 6px var(--amber); }
-  h1.name{ font-family:'Press Start 2P', monospace; font-weight:400; font-size:clamp(16px, 2.6vw, 26px); line-height:1.5; margin:0 0 18px; color:var(--green); text-shadow:0 0 8px var(--green); }
+  h1.name{ font-family:'Press Start 2P', monospace; font-weight:400; font-size:clamp(14px, 2.4vw, 24px); line-height:1.5; margin:0 0 18px; color:var(--green); text-shadow:0 0 8px var(--green); }
   h1.name .accent{ color:var(--amber); text-shadow:0 0 8px var(--amber); }
   .role{ font-size:20px; color:var(--ink-dim); max-width:560px; margin-bottom:24px; }
 
@@ -124,7 +109,6 @@
   }
   .chip:hover{ border-color:var(--green); color:var(--green); box-shadow:0 0 8px var(--green); }
 
-  /* ---------- ROUTING PANEL ---------- */
   .routing-panel{ border:2px solid var(--green); background:rgba(0,18,0,0.75); box-shadow:4px 4px 0 0 var(--ink-faint); }
   .routing-head{ display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border-bottom:2px solid var(--green); font-family:'Press Start 2P', monospace; font-size:9px; color:var(--ink-dim); text-transform:uppercase; }
   .routing-head .live{ color:var(--green); display:flex; align-items:center; gap:6px; }
@@ -140,15 +124,13 @@
   @keyframes fillbar{ from{ transform:scaleX(0); } }
   .routing-foot{ padding:8px 14px; font-family:'Share Tech Mono', monospace; font-size:14px; color:var(--ink-dim); border-top:2px solid var(--green); }
 
-  /* ---------- SECTION ---------- */
   section{ position:relative; z-index:3; padding:56px 0; border-top:2px solid var(--green); }
   .sec-head{ display:flex; align-items:baseline; gap:14px; margin-bottom:28px; flex-wrap:wrap; }
   .sec-tag{ font-family:'Press Start 2P', monospace; font-size:9px; color:var(--amber); border:2px solid var(--amber); padding:4px 8px; text-transform:uppercase; letter-spacing:0.06em; }
   .sec-title{ font-family:'Press Start 2P', monospace; font-size:clamp(12px,2vw,18px); font-weight:400; margin:0; color:var(--green); text-shadow:0 0 8px var(--green); }
   .sec-sub{ color:var(--ink-dim); font-size:18px; margin:-18px 0 24px; max-width:720px; }
 
-  /* ---------- PROJECTS GRID ---------- */
-  .proj-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr)); gap:16px; }
+  .proj-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap:16px; }
   .proj-card{
     border:2px solid var(--ink-faint); background:rgba(0,18,0,0.7);
     padding:14px; transition:border-color .1s, box-shadow .1s, transform .1s;
@@ -156,12 +138,16 @@
   }
   .proj-card:hover{ border-color:var(--green); box-shadow:0 0 12px var(--green), 3px 3px 0 0 var(--ink-faint); transform:translate(-1px,-1px); }
   .proj-name{ font-family:'Press Start 2P', monospace; font-size:10px; color:var(--amber); margin-bottom:8px; text-shadow:0 0 4px var(--amber); line-height:1.6; word-break:break-word; }
-  .proj-lang{ font-family:'Share Tech Mono', monospace; font-size:13px; color:var(--cyan); margin-bottom:6px; }
-  .proj-desc{ font-size:16px; color:var(--ink-dim); margin-bottom:10px; min-height:40px; }
+  .proj-meta{ display:flex; gap:8px; align-items:center; margin-bottom:6px; flex-wrap:wrap; }
+  .proj-lang{ font-family:'Share Tech Mono', monospace; font-size:13px; color:var(--cyan); }
+  .vis{ font-family:'Press Start 2P', monospace; font-size:8px; padding:3px 6px; border:1px solid; }
+  .vis.pub{ color:var(--green); border-color:var(--green); }
+  .vis.priv{ color:var(--red); border-color:var(--red); }
+  .proj-desc{ font-size:16px; color:var(--ink-dim); margin-bottom:10px; min-height:44px; }
   .proj-link{ font-family:'Press Start 2P', monospace; font-size:8px; color:var(--green); border:1px solid var(--green); padding:4px 6px; display:inline-block; }
   .proj-link:hover{ background:var(--green); color:#000; }
+  .proj-link.disabled{ color:var(--ink-faint); border-color:var(--ink-faint); cursor:not-allowed; pointer-events:none; }
 
-  /* ---------- MANIFEST ---------- */
   .manifest{ display:grid; grid-template-columns: repeat(2, 1fr); gap:2px; background:var(--green); border:2px solid var(--green); }
   @media (max-width:700px){ .manifest{ grid-template-columns:1fr; } }
   .manifest-cell{ background:rgba(0,18,0,0.85); padding:18px 20px; }
@@ -170,7 +156,6 @@
   .manifest-cell .items span{ font-size:16px; color:var(--ink-dim); padding:3px 0; }
   .manifest-cell .items span:not(:last-child)::after{ content:'·'; color:var(--ink-faint); margin-left:6px; }
 
-  /* ---------- EXPERIENCE ---------- */
   .two-col{ display:grid; grid-template-columns: 1fr 1fr; gap:36px; }
   @media (max-width:780px){ .two-col{ grid-template-columns:1fr; } }
   .rec{ margin-bottom:22px; border-left:2px solid var(--green); padding-left:12px; }
@@ -182,7 +167,6 @@
   .cert-list li{ display:flex; justify-content:space-between; gap:12px; padding:8px 0; border-bottom:1px solid var(--ink-faint); font-size:18px; }
   .cert-list li span:last-child{ font-family:'Share Tech Mono', monospace; font-size:14px; color:var(--ink-dim); white-space:nowrap; }
 
-  /* ---------- FOOTER ---------- */
   footer{ position:relative; z-index:3; padding:50px 0 40px; text-align:center; border-top:2px solid var(--green); }
   footer .display{ font-family:'Press Start 2P', monospace; font-size:clamp(12px,2.4vw,20px); font-weight:400; margin:0 0 16px; color:var(--green); text-shadow:0 0 10px var(--green); line-height:1.6; }
   footer .role{ margin:0 auto 24px; color:var(--ink-dim); max-width:640px; }
@@ -193,7 +177,6 @@
   .btn-primary:hover{ background:var(--amber); border-color:var(--amber); color:#000; }
   .fine{ margin-top:30px; font-family:'Share Tech Mono', monospace; font-size:14px; color:var(--ink-faint); }
 
-  /* Glitch */
   .glitch{ position:relative; display:inline-block; }
   .glitch::before, .glitch::after{ content:attr(data-text); position:absolute; top:0; left:0; width:100%; overflow:hidden; }
   .glitch::before{ left:2px; text-shadow:-2px 0 var(--red); animation:glitch1 2.4s infinite linear alternate-reverse; clip-path:inset(0 0 60% 0); }
@@ -201,9 +184,7 @@
   @keyframes glitch1{ 0%{transform:translate(0);} 20%{transform:translate(-2px,1px);} 40%{transform:translate(2px,-1px);} 60%{transform:translate(-1px,2px);} 80%{transform:translate(1px,-2px);} 100%{transform:translate(0);} }
   @keyframes glitch2{ 0%{transform:translate(0);} 25%{transform:translate(2px,2px);} 50%{transform:translate(-2px,-1px);} 75%{transform:translate(1px,1px);} 100%{transform:translate(0);} }
 
-  @media (prefers-reduced-motion: reduce){
-    *{ animation:none !important; transition:none !important; }
-  }
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
 </style>
 </head>
 <body>
@@ -215,7 +196,7 @@
 <header>
   <div class="wrap">
     <nav>
-      <div class="brand"><span class="brand-dot"></span>NAINI.VIVEKANAND <span style="color:var(--ink-faint)">::</span> <span style="color:var(--ink-dim)">agentic-systems</span></div>
+      <div class="brand"><span class="brand-dot"></span>NAINI.VIVEKANAND <span style="color:var(--ink-faint)">::</span> <span style="color:var(--ink-dim)">ai/ml-engineer</span></div>
       <div class="navlinks">
         <a href="#work">Projects</a>
         <a href="#stack">Stack</a>
@@ -230,17 +211,17 @@
   <div class="wrap">
     <div class="boot mono">
       <div class="line">$ init --profile=naini_vivekanand</div>
-      <div class="line"><span class="ok">✓</span> role: generative ai engineer, agentic systems</div>
+      <div class="line"><span class="ok">✓</span> role: ai/ml engineer, llm agents, rag & production ai</div>
       <div class="line"><span class="ok">✓</span> location: hyderabad, telangana, in</div>
-      <div class="line"><span class="ok">✓</span> repos: 26 public, matrix-mode enabled</div>
+      <div class="line"><span class="ok">✓</span> repos: 27 total (25 public · 2 private client)</div>
       <div class="line">$ status: open to opportunities<span class="cursor"></span></div>
     </div>
 
     <div class="hero-grid">
       <div>
-        <div class="eyebrow">[ GENERATIVE AI ENGINEER ]</div>
-        <h1 class="name glitch" data-text="I BUILD SYSTEMS THAT DECIDE, NOT JUST RESPOND.">I BUILD SYSTEMS THAT <span class="accent">DECIDE</span>,<br>NOT JUST RESPOND.</h1>
-        <p class="role">Designing and shipping <b style="color:var(--green)">agentic AI systems</b> — from self-evolving multi-agent architectures to production safety middleware. Fluent in <b style="color:var(--green)">LLM orchestration</b>, <b style="color:var(--green)">RAG pipelines</b>, and tool-use frameworks, with a habit of taking things from architecture to a working, tested CLI.</p>
+        <div class="eyebrow">[ AI/ML ENGINEER ]</div>
+        <h1 class="name glitch" data-text="I BUILD AND SHIP PRODUCTION AI SYSTEMS.">I BUILD AND SHIP <span class="accent">PRODUCTION AI</span> SYSTEMS.</h1>
+        <p class="role">AI/ML Engineer focused on building and shipping production AI agents and RAG systems. Experienced in Python, LLM integration, agent orchestration, and retrieval evaluation. Built autonomous multi-provider agent systems with 800+ automated tests, and a production RAG pipeline with measured recall, MRR, and faithfulness against a baseline.</p>
         <div class="contact-row">
           <a class="chip" href="mailto:nainiv750@gmail.com">nainiv750@gmail.com</a>
           <a class="chip" href="tel:+917288945374">+91 72889 45374</a>
@@ -279,7 +260,7 @@
       <span class="sec-tag">system.log</span>
       <h2 class="sec-title">PROJECTS</h2>
     </div>
-    <p class="sec-sub">All public repositories, pulled live from GitHub. Each one a node in the agentic stack.</p>
+    <p class="sec-sub">Public and private projects — sourced from GitHub and client work. Private repos are marked [PRIVATE].</p>
     <div id="projGrid" class="proj-grid"></div>
   </div>
 </section>
@@ -293,27 +274,27 @@
     <p class="sec-sub">What's under the hood — grouped the way the systems above actually use it.</p>
     <div class="manifest">
       <div class="manifest-cell">
-        <h4>AGENTIC AI & LLMs</h4>
+        <h4>LANGUAGES</h4>
         <div class="items">
-          <span>Agent architectures</span><span>Tool use / orchestration</span><span>RAG</span><span>Prompt engineering</span><span>Model evaluation</span><span>LangChain</span><span>LlamaIndex</span><span>Hugging Face Transformers</span><span>Vector databases</span><span>LoRA fine-tuning</span><span>STT / TTS</span><span>Multi-provider LLM routing</span>
+          <span>Python</span><span>TypeScript</span><span>SQL</span><span>JavaScript</span><span>Rust</span><span>C++</span><span>C</span>
         </div>
       </div>
       <div class="manifest-cell">
-        <h4>PROGRAMMING & SYSTEMS</h4>
+        <h4>AI/ML</h4>
         <div class="items">
-          <span>Python</span><span>JavaScript</span><span>C++</span><span>C</span><span>SQL</span><span>REST APIs</span><span>Message queues</span><span>MLOps</span><span>Rust</span><span>TypeScript</span>
+          <span>LLM integration</span><span>RAG</span><span>Agent orchestration</span><span>LangChain</span><span>Prompt engineering</span><span>Model evaluation</span><span>Hugging Face</span><span>BM25</span><span>Embeddings</span><span>Reranking</span>
         </div>
       </div>
       <div class="manifest-cell">
-        <h4>FRAMEWORKS</h4>
+        <h4>BACKEND</h4>
         <div class="items">
-          <span>FastAPI</span><span>Flask</span><span>React</span><span>Next.js</span><span>Electron</span><span>Pandas</span><span>NumPy</span><span>Matplotlib</span><span>Seaborn</span><span>Scikit-learn</span><span>Three.js</span><span>TensorFlow</span>
+          <span>FastAPI</span><span>Flask</span><span>REST APIs</span><span>OCR</span><span>CLI development</span>
         </div>
       </div>
       <div class="manifest-cell">
-        <h4>CLOUD, DATA & DEVOPS</h4>
+        <h4>CLOUD & DEVOPS</h4>
         <div class="items">
-          <span>AWS</span><span>Microsoft Azure</span><span>Docker</span><span>Kubernetes</span><span>Git</span><span>MySQL</span><span>MongoDB</span><span>PostgreSQL</span><span>Data visualization</span><span>Streamlit</span>
+          <span>AWS</span><span>GCP</span><span>Azure</span><span>Docker</span><span>Git</span><span>CI/CD</span><span>Automated testing</span><span>Deployment</span>
         </div>
       </div>
     </div>
@@ -330,28 +311,40 @@
       <div>
         <h4 class="mono" style="font-size:14px; text-transform:uppercase; letter-spacing:0.1em; color:var(--amber); margin-bottom:16px;">EXPERIENCE</h4>
         <div class="rec">
-          <div class="rec-title">Data Science Intern</div>
-          <div class="rec-org">Cognifyz Technologies</div>
-          <p>Performed data cleaning, exploratory data analysis, and built machine learning models in Python on real-world datasets.</p>
-          <p>Applied data visualization techniques to translate raw data into actionable insights for stakeholders.</p>
+          <div class="rec-title">AI & ML Software Intern</div>
+          <div class="rec-org">PM Accelerator · Sep 2026 - Present</div>
+          <p>Built backend services, APIs, and frontend screens that bring AI/ML features into the live product.</p>
+          <p>Connected ML models to backend logic and user-facing features, handling validation, errors, and edge cases.</p>
+          <p>Debugged issues across data, backend, and UI; contributed to planning, code reviews, and releases.</p>
         </div>
+        <div class="rec">
+          <div class="rec-title">Data Science Intern</div>
+          <div class="rec-org">Cognifyz Technologies · 04/2026 - 07/2026</div>
+          <p>Cleaned and explored real-world datasets, and built and evaluated machine learning models in Python.</p>
+          <p>Worked through the full ML workflow — from raw data to a working model — translating a practical problem into a testable approach and iterating based on results.</p>
+        </div>
+
         <h4 class="mono" style="font-size:14px; text-transform:uppercase; letter-spacing:0.1em; color:var(--amber); margin:28px 0 16px;">CERTIFICATIONS</h4>
         <ul class="cert-list mono">
+          <li><span>Programming with Python</span><span>Innomatics</span></li>
+          <li><span>Applied Machine Learning</span><span>Innomatics</span></li>
+          <li><span>SQL</span><span>Innomatics</span></li>
+          <li><span>Power BI</span><span>Innomatics</span></li>
+          <li><span>Generative AI</span><span>Innomatics</span></li>
+          <li><span>Agentic AI</span><span>Innomatics</span></li>
           <li><span>Claude 101</span><span>Anthropic</span></li>
           <li><span>AI Fluency Framework & Foundations</span><span>Anthropic</span></li>
-          <li><span>Exploratory Data Analysis</span><span>Innomatics Research Labs</span></li>
-          <li><span>Power BI Certification</span><span>Innomatics Research Labs</span></li>
         </ul>
       </div>
       <div>
         <h4 class="mono" style="font-size:14px; text-transform:uppercase; letter-spacing:0.1em; color:var(--amber); margin-bottom:16px;">EDUCATION</h4>
         <div class="rec">
-          <div class="rec-title">Data Science & Generative AI</div>
-          <div class="rec-org">Innomatics Research Labs, Hyderabad</div>
+          <div class="rec-title">B.Tech, CSE (AI & ML)</div>
+          <div class="rec-org">Neil Gogte Institute of Technology · 2020 - 2024</div>
         </div>
         <div class="rec">
-          <div class="rec-title">B.Tech, CSE (AI & ML)</div>
-          <div class="rec-org">Neil Gogte Institute of Technology, Hyderabad</div>
+          <div class="rec-title">Data Science & Generative AI</div>
+          <div class="rec-org">Innomatics Research Labs, Hyderabad · 2026</div>
         </div>
       </div>
     </div>
@@ -360,8 +353,8 @@
 
 <footer id="contact">
   <div class="wrap">
-    <p class="display">BUILDING THE NEXT AUTONOMOUS SYSTEM?</p>
-    <p class="role">Let's talk agents, orchestration, or anything that needs to think for itself.</p>
+    <p class="display">BUILDING THE NEXT PRODUCTION AI SYSTEM?</p>
+    <p class="role">Let's talk agents, RAG, evaluation, or anything that needs to think for itself.</p>
     <div class="cta-row">
       <a class="btn btn-primary" href="mailto:nainiv750@gmail.com">Email me</a>
       <a class="btn btn-ghost" href="https://github.com/kvik0802" target="_blank" rel="noopener">View GitHub</a>
@@ -372,7 +365,6 @@
 </footer>
 
 <script>
-// ---------- MATRIX RAIN (pixelated) ----------
 const canvas = document.getElementById('matrix');
 const ctx = canvas.getContext('2d');
 const SCALE = 2;
@@ -404,43 +396,50 @@ setInterval(draw, 60);
 window.addEventListener('resize', resize);
 resize();
 
-// ---------- PROJECTS FROM GITHUB ----------
 const repos = [
- {name:'AIRA',lang:'Rust',desc:'Autonomous Intelligence & Reasoning Agent core system.',url:'https://github.com/kvik0802/AIRA'},
- {name:'AIRA-CLI-2',lang:'Rust',desc:'Autonomous Intelligence & Reasoning Agent — terminal, desktop, gateway, and BrainOS cognition in one stack with verified memory integrity.',url:'https://github.com/kvik0802/AIRA-CLI-2'},
- {name:'A.I.R.A-CLI',lang:'Rust',desc:'AI-powered CLI with 65+ commands, multi-provider LLM support, persistent memory, and autonomous file operations.',url:'https://github.com/kvik0802/A.I.R.A-CLI'},
- {name:'aira-brainos-core',lang:'Python',desc:'Self-contained cognitive system that learns from experience without LLMs or transformers.',url:'https://github.com/kvik0802/aira-brainos-core'},
- {name:'AIRA-LLM',lang:'-',desc:'Custom-trained 7B AI model optimized for general-purpose tasks with Ollama integration.',url:'https://github.com/kvik0802/AIRA-LLM'},
- {name:'AIRA-V1-RSL',lang:'Python',desc:'AIRA v1 reinforcement / self-learning experiments.',url:'https://github.com/kvik0802/AIRA-V1-RSL'},
- {name:'AIRAOS',lang:'TypeScript',desc:'AIRA operating system layer.',url:'https://github.com/kvik0802/AIRAOS'},
- {name:'agent-guardian',lang:'Python',desc:'Real-time AI safety middleware for autonomous agents — intercept, score, simulate, approve, rollback.',url:'https://github.com/kvik0802/agent-guardian'},
- {name:'RL-EvalBench',lang:'Python',desc:'Frontier Reinforcement Learning Environment & Dynamic Code Verification Engine for LLM Agents.',url:'https://github.com/kvik0802/RL-EvalBench'},
- {name:'OmniQuery-NL2SQL-Agent',lang:'Python',desc:'Autonomous NL-to-SQL Analytics Agent powered by LangGraph, schema knowledge graphs, SQL AST guardrails, and auto-visualizations.',url:'https://github.com/kvik0802/OmniQuery-NL2SQL-Agent'},
- {name:'llm-eval-query-engine',lang:'Python',desc:'LLM evaluation query engine.',url:'https://github.com/kvik0802/llm-eval-query-engine'},
- {name:'neuromorphic-synapse-memory',lang:'Python',desc:'Neuromorphic synapse memory system.',url:'https://github.com/kvik0802/neuromorphic-synapse-memory'},
- {name:'ANN-Detection-System',lang:'Jupyter Notebook',desc:'Intelligent Anti-Money Laundering Detection System using ANNs — real-time transaction screening with TensorFlow/Keras and Streamlit.',url:'https://github.com/kvik0802/ANN-Detection-System'},
- {name:'omniscient-terminal',lang:'TypeScript',desc:'Dark-themed mission control dashboard for financial markets intelligence — live charts, AI predictions, trade signals, paper trading.',url:'https://github.com/kvik0802/omniscient-terminal'},
- {name:'particle-manipulator',lang:'HTML',desc:'Interactive 3D particle morphing engine — 150K WebGL particles transforming between shapes and cosmic formations.',url:'https://github.com/kvik0802/particle-manipulator'},
- {name:'blood-bank-locator',lang:'TypeScript',desc:'Life-saving blood bank discovery platform connecting patients with nearby banks in real-time across 86 banks in 37 countries.',url:'https://github.com/kvik0802/blood-bank-locator'},
- {name:'NSS-ENTERPRISES',lang:'TypeScript',desc:'NSS enterprises nest interior elements.',url:'https://github.com/kvik0802/NSS-ENTERPRISES'},
- {name:'Skyline-weather-app',lang:'JavaScript',desc:'Skyline weather application.',url:'https://github.com/kvik0802/Skyline-weather-app'},
- {name:'IPL-Prediction-using-ML',lang:'Python',desc:'ML project: IPL prediction deployed to GitHub / Hugging Face / Streamlit cloud.',url:'https://github.com/kvik0802/IPL-Prediction-using-ML'},
- {name:'tataiplmatchprediction',lang:'Python',desc:'Tata IPL match prediction.',url:'https://github.com/kvik0802/tataiplmatchprediction'},
- {name:'EV-Sales-2010-2024-',lang:'-',desc:'Global EV sales analysis 2010-2024.',url:'https://github.com/kvik0802/EV-Sales-2010-2024-'},
- {name:'Carwaleanalytics',lang:'-',desc:'CarWale analytics.',url:'https://github.com/kvik0802/Carwaleanalytics'},
- {name:'Sql-project',lang:'-',desc:'Employee management system (SQL).',url:'https://github.com/kvik0802/Sql-project'},
- {name:'swiggy',lang:'-',desc:'Swiggy data analysis.',url:'https://github.com/kvik0802/swiggy'},
- {name:'file-handling-in-python',lang:'-',desc:'File handling in Python.',url:'https://github.com/kvik0802/file-handling-in-python'}
+ {name:'Production RAG System (Retrieval Evaluation)',lang:'FastAPI, Docker, BM25, Embeddings',vis:'priv',desc:'Hybrid search pipeline (BM25 + embeddings) with reranker; measured recall, MRR, and answer faithfulness on a hand-labeled set against a keyword-only baseline. Automated regression tests for retrieval/prompt changes.',url:''},
+ {name:'TruText - AI Document Intelligence Platform',lang:'Python, OCR, LLMs, RAG, FastAPI',vis:'priv',desc:'Processes Texas SNAP documents via PDF extraction, OCR, and LLMs to identify critical info, classify documents, and generate simplified bilingual explanations. Privacy-aware extraction, evidence-grounded RAG. (In Progress)',url:''},
+ {name:'AIRA - Autonomous AI Agent System (BrainOS)',lang:'Python, LLM routing, Ollama',vis:'pub',desc:'Autonomous agent platform with structured validated LLM outputs, graceful fallbacks, request routing across multiple providers with failover. Modular cognitive architecture with permission threading, observability, governance; 0→800+ tests.',url:'https://github.com/kvik0802/AIRA'},
+ {name:'Agent Guardian',lang:'Python, FastAPI, GPT-4o-mini, Next.js',vis:'pub',desc:'Middleware between agent and its actions: real-time risk scoring, human approval for risky actions, rollback. Dashboards to monitor agent behavior and policy compliance.',url:'https://github.com/kvik0802/agent-guardian'},
+ {name:'AIRA-CLI-2',lang:'Rust',vis:'pub',desc:'Autonomous Intelligence & Reasoning Agent — terminal, desktop, gateway, and BrainOS cognition in one stack with verified memory integrity.',url:'https://github.com/kvik0802/AIRA-CLI-2'},
+ {name:'A.I.R.A-CLI',lang:'Rust',vis:'pub',desc:'AI-powered CLI with 65+ commands, multi-provider LLM support, persistent memory, and autonomous file operations.',url:'https://github.com/kvik0802/A.I.R.A-CLI'},
+ {name:'aira-brainos-core',lang:'Python',vis:'pub',desc:'Self-contained cognitive system that learns from experience without LLMs or transformers.',url:'https://github.com/kvik0802/aira-brainos-core'},
+ {name:'AIRA-LLM',lang:'-',vis:'pub',desc:'Custom-trained 7B AI model optimized for general-purpose tasks with Ollama integration.',url:'https://github.com/kvik0802/AIRA-LLM'},
+ {name:'AIRA-V1-RSL',lang:'Python',vis:'pub',desc:'AIRA v1 reinforcement / self-learning experiments.',url:'https://github.com/kvik0802/AIRA-V1-RSL'},
+ {name:'AIRAOS',lang:'TypeScript',vis:'pub',desc:'AIRA operating system layer.',url:'https://github.com/kvik0802/AIRAOS'},
+ {name:'RL-EvalBench',lang:'Python',vis:'pub',desc:'Frontier Reinforcement Learning Environment & Dynamic Code Verification Engine for LLM Agents.',url:'https://github.com/kvik0802/RL-EvalBench'},
+ {name:'OmniQuery-NL2SQL-Agent',lang:'Python',vis:'pub',desc:'Autonomous NL-to-SQL Analytics Agent powered by LangGraph, schema knowledge graphs, SQL AST guardrails, and auto-visualizations.',url:'https://github.com/kvik0802/OmniQuery-NL2SQL-Agent'},
+ {name:'llm-eval-query-engine',lang:'Python',vis:'pub',desc:'LLM evaluation query engine.',url:'https://github.com/kvik0802/llm-eval-query-engine'},
+ {name:'neuromorphic-synapse-memory',lang:'Python',vis:'pub',desc:'Neuromorphic synapse memory system.',url:'https://github.com/kvik0802/neuromorphic-synapse-memory'},
+ {name:'ANN-Detection-System',lang:'Jupyter Notebook',vis:'pub',desc:'Intelligent Anti-Money Laundering Detection System using ANNs — real-time transaction screening with TensorFlow/Keras and Streamlit.',url:'https://github.com/kvik0802/ANN-Detection-System'},
+ {name:'omniscient-terminal',lang:'TypeScript',vis:'pub',desc:'Dark-themed mission control dashboard for financial markets intelligence — live charts, AI predictions, trade signals, paper trading.',url:'https://github.com/kvik0802/omniscient-terminal'},
+ {name:'particle-manipulator',lang:'HTML',vis:'pub',desc:'Interactive 3D particle morphing engine — 150K WebGL particles transforming between shapes and cosmic formations.',url:'https://github.com/kvik0802/particle-manipulator'},
+ {name:'blood-bank-locator',lang:'TypeScript',vis:'pub',desc:'Life-saving blood bank discovery platform connecting patients with nearby banks in real-time across 86 banks in 37 countries.',url:'https://github.com/kvik0802/blood-bank-locator'},
+ {name:'NSS-ENTERPRISES',lang:'TypeScript',vis:'pub',desc:'NSS enterprises nest interior elements.',url:'https://github.com/kvik0802/NSS-ENTERPRISES'},
+ {name:'Skyline-weather-app',lang:'JavaScript',vis:'pub',desc:'Skyline weather application.',url:'https://github.com/kvik0802/Skyline-weather-app'},
+ {name:'IPL-Prediction-using-ML',lang:'Python',vis:'pub',desc:'ML project: IPL prediction deployed to GitHub / Hugging Face / Streamlit cloud.',url:'https://github.com/kvik0802/IPL-Prediction-using-ML'},
+ {name:'tataiplmatchprediction',lang:'Python',vis:'pub',desc:'Tata IPL match prediction.',url:'https://github.com/kvik0802/tataiplmatchprediction'},
+ {name:'EV-Sales-2010-2024-',lang:'-',vis:'pub',desc:'Global EV sales analysis 2010-2024.',url:'https://github.com/kvik0802/EV-Sales-2010-2024-'},
+ {name:'Carwaleanalytics',lang:'-',vis:'pub',desc:'CarWale analytics.',url:'https://github.com/kvik0802/Carwaleanalytics'},
+ {name:'Sql-project',lang:'-',vis:'pub',desc:'Employee management system (SQL).',url:'https://github.com/kvik0802/Sql-project'},
+ {name:'swiggy',lang:'-',vis:'pub',desc:'Swiggy data analysis.',url:'https://github.com/kvik0802/swiggy'},
+ {name:'file-handling-in-python',lang:'-',vis:'pub',desc:'File handling in Python.',url:'https://github.com/kvik0802/file-handling-in-python'}
 ];
 const grid = document.getElementById('projGrid');
 repos.forEach(r=>{
   const card = document.createElement('div');
   card.className = 'proj-card';
+  const tag = r.vis === 'priv'
+    ? '<span class="vis priv">PRIVATE</span>'
+    : '<span class="vis pub">PUBLIC</span>';
+  const link = r.url
+    ? `<a class="proj-link" href="${r.url}" target="_blank" rel="noopener">OPEN REPO ></a>`
+    : `<span class="proj-link disabled">PRIVATE REPO</span>`;
   card.innerHTML = `
     <div class="proj-name">${r.name}</div>
-    <div class="proj-lang">[${r.lang}]</div>
+    <div class="proj-meta"><span class="proj-lang">[${r.lang}]</span>${tag}</div>
     <div class="proj-desc">${r.desc}</div>
-    <a class="proj-link" href="${r.url}" target="_blank" rel="noopener">OPEN REPO ></a>
+    ${link}
   `;
   grid.appendChild(card);
 });
