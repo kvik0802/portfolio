@@ -148,7 +148,7 @@
   .proj-link:hover{ background:var(--green); color:#000; }
   .proj-link.disabled{ color:var(--ink-faint); border-color:var(--ink-faint); cursor:not-allowed; pointer-events:none; }
 
-  .manifest{ display:grid; grid-template-columns: repeat(2, 1fr); gap:2px; background:var(--green); border:2px solid var(--green); }
+  .manifest{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap:2px; background:var(--green); border:2px solid var(--green); }
   @media (max-width:700px){ .manifest{ grid-template-columns:1fr; } }
   .manifest-cell{ background:rgba(0,18,0,0.85); padding:18px 20px; }
   .manifest-cell h4{ font-family:'Press Start 2P', monospace; font-size:9px; color:var(--amber); margin:0 0 12px; text-shadow:0 0 4px var(--amber); }
@@ -283,19 +283,31 @@
       <div class="manifest-cell">
         <h4>AI/ML</h4>
         <div class="items">
-          <span>LLM integration</span><span>RAG</span><span>Agent orchestration</span><span>LangChain</span><span>Prompt engineering</span><span>Model evaluation</span><span>Hugging Face</span><span>BM25</span><span>Embeddings</span><span>Reranking</span>
+          <span>LLM integration</span><span>RAG</span><span>Agent orchestration</span><span>LangChain</span><span>Prompt engineering</span><span>Model evaluation</span><span>Hugging Face</span><span>BM25</span><span>Embeddings</span><span>Reranking</span><span>Ollama</span><span>LoRA fine-tuning</span><span>Unsloth</span><span>TensorFlow / Keras</span>
         </div>
       </div>
       <div class="manifest-cell">
         <h4>BACKEND</h4>
         <div class="items">
-          <span>FastAPI</span><span>Flask</span><span>REST APIs</span><span>OCR</span><span>CLI development</span>
+          <span>FastAPI</span><span>Flask</span><span>REST APIs</span><span>OCR</span><span>CLI development</span><span>Streamlit</span>
         </div>
       </div>
       <div class="manifest-cell">
         <h4>CLOUD & DEVOPS</h4>
         <div class="items">
-          <span>AWS</span><span>GCP</span><span>Azure</span><span>Docker</span><span>Git</span><span>CI/CD</span><span>Automated testing</span><span>Deployment</span>
+          <span>AWS</span><span>GCP</span><span>Azure</span><span>Docker</span><span>Kubernetes</span><span>Git</span><span>CI/CD</span><span>Automated testing</span><span>Deployment</span>
+        </div>
+      </div>
+      <div class="manifest-cell">
+        <h4>FRONTEND & VIZ</h4>
+        <div class="items">
+          <span>React</span><span>Next.js</span><span>Three.js / WebGL</span><span>HTML / CSS</span><span>Data visualization</span>
+        </div>
+      </div>
+      <div class="manifest-cell">
+        <h4>DATA & STORAGE</h4>
+        <div class="items">
+          <span>PostgreSQL</span><span>MySQL</span><span>MongoDB</span><span>Vector databases</span><span>Pandas</span><span>NumPy</span>
         </div>
       </div>
     </div>
